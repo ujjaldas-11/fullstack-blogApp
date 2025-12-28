@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
-
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm";
 
 export default async function PostPage({ params }) {
     const { slug } = await params;
@@ -26,9 +27,14 @@ export default async function PostPage({ params }) {
                     day: 'numeric',
                 })}
             </time>
-            <div className="mt-8">
+            {/* <div className="mt-8">
                 <p>{post.content}</p>
-            </div>
+            </div> */}
+
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {post.content}
+            </ReactMarkdown>
+            
         </article>
     );
 }

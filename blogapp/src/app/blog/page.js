@@ -29,6 +29,7 @@ export default async function blogPage() {
                         <p className='text-gray-500 text-sm text-right'>{new Date(post.created_at).toLocaleDateString()}</p>
                     </div>
                 ))  }
+                <a href='/write' className='text-blue-600 hover-underline'>write a new post</a>
         </div>
     ) 
 }
