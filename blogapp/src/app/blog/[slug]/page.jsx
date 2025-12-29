@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm";
-import { deletePost } from "@/server/actions/posts";
 import DeletePostButtno from "@/components/DeletePostButton";
 
 export default async function PostPage({ params }) {
@@ -20,7 +19,7 @@ export default async function PostPage({ params }) {
 
 
     return (
-        <article className="max-w-4xl mx-auto p-8 prose prose-lg dark:prose-invert">
+        <div className="max-w-4xl mx-auto p-8 prose prose-lg dark:prose-invert">
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <time className="text-gray-500 text-sm block mb-8">
                 {new Date(post.created_at).toLocaleDateString('en-US', {
@@ -38,18 +37,20 @@ export default async function PostPage({ params }) {
             </ReactMarkdown>
 
 
-            <div>
+            <div className="flex gap-4 mt-10">
                 <a
-                    href={`/write/${post.slug}`}
+                    href={`/write/${post.id}`}
                     className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition"
-                >Edit Post</a>
+                >
+                    Edit Post
+                </a>
 
 
-                // delete post from components
+                {/* delete post from components */}
 
                 <DeletePostButtno slug={post.slug} />
             </div>
 
-        </article>
+        </div>
     );
 }

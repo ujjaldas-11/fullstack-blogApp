@@ -18,8 +18,9 @@ export default async function blogPage() {
     }
 
     return(
-        <div>
-            <h1>Blog page</h1>
+        <div className='text-center mb-8'>
+            <h1 className='text-4xl font-bold text-center mt-10'>Blog page</h1>
+            <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post)=> (
                     <div key={post.id} className='bg-white text-black border rounded-2xl w-[300px] m-10 p-4'>
                         <a href={`/blog/${post.slug}`} className='no-underline'>
@@ -29,7 +30,10 @@ export default async function blogPage() {
                         <p className='text-gray-500 text-sm text-right'>{new Date(post.created_at).toLocaleDateString()}</p>
                     </div>
                 ))  }
-                <a href='/write' className='text-blue-600 hover-underline'>write a new post</a>
+            </div>
+            <button className='p-4 text-white text-center bg-blue-600 rounded-lg font-semibold cursor-pointer'>
+                <a href='/write' className='hover-underline'>write a new post</a>
+            </button>
         </div>
     ) 
 }
