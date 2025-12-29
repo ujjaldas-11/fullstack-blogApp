@@ -2,7 +2,7 @@ import { createPost } from "@/server/actions/posts"
 
 export default function writePage() {
     return (
-        <>
+        <div className="max-w-4xl mx-auto p-8">
             <h1 className="text-3xl font-bold mb-8">write tour post</h1>
 
             <form action={createPost} className="space-y-6">
@@ -34,6 +34,6 @@ export default function writePage() {
                 <button type="submit"
                     className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">publish post</button>
             </form>
-        </>
+        </div>
     )
 }

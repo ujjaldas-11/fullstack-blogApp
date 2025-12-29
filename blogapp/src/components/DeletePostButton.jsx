@@ -1,0 +1,24 @@
+'use client';
+
+import { deletePost } from "@/server/actions/posts";
+
+export default function DeletePostButtno({ slug }) {
+    const handleDelete = async (formData) => {
+        if (!confirm('Are you sure you want to delete this post?')) {
+            e.preventDefault();
+        }
+        await deletePost(slug);
+    };
+
+    return (
+        <form action={handleDelete}>
+            <button
+                type="submit"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+                Delete Post
+            </button>
+        </form>
+    )
+}
+
