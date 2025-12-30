@@ -1,8 +1,16 @@
 import React from 'react'
 import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 
 export default async function blogPage() {
+    const supabase = await createSupabaseServerClient();
+    const {data: {user}} = await supabase.auth.getUser();
+    
+    console.log('Current user: ', user);
+
+    const isLoggedIn = !!user;
+
     const {data: posts, error} = await supabase
     .from('posts')
     .select('*')
@@ -19,6 +27,11 @@ export default async function blogPage() {
 
     return(
         <div className='text-center mb-8'>
+            {isLoggedIn ? (
+                <p>Welcome Back! <a href="/write">Write a new post</a></p>
+            ): (
+                <p><a href="/login">Log in</a> to write posts</p>
+            )}
             <h1 className='text-4xl font-bold text-center mt-10'>Blog page</h1>
             <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post)=> (

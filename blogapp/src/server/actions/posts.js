@@ -1,5 +1,6 @@
 'use server';
 import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // import { Erica_One } from "next/font/google";
@@ -7,6 +8,12 @@ import { redirect } from "next/navigation";
 
 export async function createPost(formData) {
     console.log('createPost called!', formData.get('title'));
+
+    const supabase = await createSupabaseServerClient();
+    const {data: {user}} = await supabase.auth.getUser();
+
+    if(!user) throw new Error('Unauthorized');
+
     const title = formData.get('title');
     const content = formData.get('content');
 
@@ -19,7 +26,7 @@ export async function createPost(formData) {
 
     const {data, error} = await supabase
         .from('posts')
-        .insert({title, content, slug})
+        .insert({title, content, slug, author_id: user.id})
         .select()
         .single();
     

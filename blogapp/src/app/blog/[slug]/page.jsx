@@ -3,10 +3,14 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm";
 import DeletePostButtno from "@/components/DeletePostButton";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function PostPage({ params }) {
-    const { slug } = await params;
 
+    const supabase = await createSupabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { slug } = await params;
     const { data: post, error } = await supabase
         .from('posts')
         .select('*')
@@ -30,26 +34,28 @@ export default async function PostPage({ params }) {
             </time>
             {/* <div className="mt-8">
                 <p>{post.content}</p>
-            </div> */}
+                </div> */}
 
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {post.content}
             </ReactMarkdown>
 
-
-            <div className="flex gap-4 mt-10">
-                <a
-                    href={`/write/${post.id}`}
-                    className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition"
-                >
-                    Edit Post
-                </a>
+            {user && user.id === post.author_id && (
 
 
-                {/* delete post from components */}
+                <div className="flex gap-4 mt-10">
+                    <a
+                        href={`/write/${post.id}`}
+                        className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition"
+                    >
+                        Edit Post
+                    </a>
 
-                <DeletePostButtno slug={post.slug} />
-            </div>
+                    {/* delete post from components */}
+
+                    <DeletePostButtno slug={post.slug} />
+                </div>
+            )}
 
         </div>
     );
