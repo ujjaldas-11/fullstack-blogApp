@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { updatePost } from "@/server/actions/posts";
 // import { ReactJsxRuntime } from "next/dist/server/route-modules/app- page/vendored/rsc/entrypoints";
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditPost({ params }) {
     const { id } = await params;
 

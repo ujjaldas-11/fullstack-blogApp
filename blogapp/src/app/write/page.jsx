@@ -1,5 +1,7 @@
 import { createPost } from "@/server/actions/posts"
 
+export const dynamic = 'force-dynamic';
+
 export default function writePage() {
     return (
         <div className="max-w-4xl mx-auto p-8">

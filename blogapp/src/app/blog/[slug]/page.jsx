@@ -5,21 +5,42 @@ import remarkGfm from "remark-gfm";
 import DeletePostButtno from "@/components/DeletePostButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+export const dynamic = 'force-dynamic';
+
 export default async function PostPage({ params }) {
 
     const supabase = await createSupabaseServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     const { slug } = await params;
+
+
+    // Fetch the post
     const { data: post, error } = await supabase
         .from('posts')
-        .select('*')
+        .select('id, title, content, slug, created_at, author_id')
         .eq('slug', slug)
-        .single(); // for exactly one post
+        .single();
 
     if (error || !post) {
         notFound(); // 404 page
     }
+
+
+    let username = 'Anonymous';
+    if (post.author_id) {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('user_id', post.author_id)
+            .single();
+
+        if (profile?.username) {
+            username = profile.username;
+        }
+    }
+
+    const isOwner = user && user.id === post.author_id;
 
 
     return (
@@ -36,11 +57,13 @@ export default async function PostPage({ params }) {
                 <p>{post.content}</p>
                 </div> */}
 
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {post.content}
-            </ReactMarkdown>
+            <div className="leading-relaxed">
+                <p className="whitespace-pre-wrap">{post.content}</p>
+            </div>
 
-            {user && user.id === post.author_id && (
+            <p>By {username}</p>
+
+            {isOwner && (
 
 
                 <div className="flex gap-4 mt-10">
