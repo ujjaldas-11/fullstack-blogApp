@@ -41,6 +41,11 @@ export async function createPost(formData) {
 }
 
 export async function updatePost(formData) {
+
+    const supabase = await createSupabaseServerClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    if(!user) throw new Error('Unauthorized');
+
     const slug = formData.get('slug');
     const title = formData.get('title');
     const content = formData.get('content');
@@ -69,6 +74,11 @@ export async function updatePost(formData) {
 
 
 export async function deletePost(currentSlug) {
+
+    const supabase = await createSupabaseServerClient();
+    const {data: { user }} = await supabase.auth.getUser();
+    if(!user) throw new Error('Unauthorized');
+
     const {error} = await supabase
     .from('posts')
     .delete()
