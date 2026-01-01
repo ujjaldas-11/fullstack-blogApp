@@ -37,7 +37,7 @@ export default function QuillEditor({ value = '', onChange }) {
         modules={modules}
         formats={formats}
         placeholder="Start writing your post..."
-        className="min-h-[400px]"
+        className="min-h-[300px]"
       />
     </div>
   );

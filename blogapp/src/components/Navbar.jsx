@@ -23,12 +23,16 @@ export default async function Navbar() {
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
+                            <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span>
                             <Link
                                 href="/write"
                                 className='text-gray-600 dark:text-gray-300'
-                            >+ write</Link>
+                            >
+                                <button className='bg-blue-600 hover:bg-blue-700 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'>
+                                    write
+                                </button>
+                            </Link>
 
-                            <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span>
 
                             <form action={handleLogout}>
                                 <button

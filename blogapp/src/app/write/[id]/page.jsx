@@ -29,7 +29,7 @@ export default function EditPost({ params }) {
 
             if (error || !post) {
                 alert('Post not found or error loading!');
-                // window.location.href = '/blog';
+                window.location.href = '/blog';
                 return;
             }
 
@@ -58,7 +58,6 @@ export default function EditPost({ params }) {
             alert('Error: ', + result.error);
             setLoading(false);
         } else {
-            // Redirect to the updated post
             const newSlug = title
                 .toLowerCase()
                 .replace(/[^a-z0-9 -]/g, '')
@@ -71,7 +70,7 @@ export default function EditPost({ params }) {
     };
 
     if (loading) {
-        return <p className="textt-center p-8 text-xl">Loading</p>
+        return <p className="text-gray-700 textt-center p-8 text-xl">Loading...</p>
     }
 
     return (
@@ -91,7 +90,6 @@ export default function EditPost({ params }) {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
-                        // defaultValue={title}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
@@ -100,20 +98,23 @@ export default function EditPost({ params }) {
                     <label className="block text-lg font-medium mb-2">Content</label>
                     <QuillEditor value={content} onChange={setContent} />
                 </div>
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-                >
-                    {loading ? 'Updating...' : 'Upadet Post'}
-                </button>
-                <button
-                    type="submit"
-                    onClick={() => window.history.back()}
-                    className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-                >
-                    Cencel
-                </button>
+
+                <div className="flex gap-4">
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                    >
+                        {loading ? 'Updating...' : 'Upadet Post'}
+                    </button>
+                    <button
+                        type="submit"
+                        onClick={() => window.history.back()}
+                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                    >
+                        Cencel
+                    </button>
+                </div>
             </form>
         </div>
     );

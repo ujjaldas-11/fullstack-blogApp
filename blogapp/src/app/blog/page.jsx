@@ -55,7 +55,7 @@ export default async function BlogPage() {
     return (
         <div className='text-center mb-8'>
             {isLoggedIn ? (
-                <p><a href="/write">hello {posts.email} </a></p>
+                <p><a href="/write">hello {posts.username} </a></p>
             ) : (
                 <p><a href="/login">Log in</a> to write posts</p>
             )}

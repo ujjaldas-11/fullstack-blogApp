@@ -71,7 +71,7 @@ export default async function PostPage({ params }) {
                 <div className="flex gap-4 mt-10">
                     <a
                         href={`/write/${post.id}`}
-                        className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition"
+                        className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition cursor-pointer"
                     >
                         Edit Post
                     </a>
@@ -81,7 +81,6 @@ export default async function PostPage({ params }) {
                     <DeletePostButtno slug={post.slug} />
                 </div>
             )}
-
         </div>
     );
 }
