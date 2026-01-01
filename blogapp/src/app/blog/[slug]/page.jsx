@@ -57,9 +57,11 @@ export default async function PostPage({ params }) {
                 <p>{post.content}</p>
                 </div> */}
 
-            <div className="leading-relaxed">
-                <p className="whitespace-pre-wrap">{post.content}</p>
-            </div>
+            <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+
 
             <p>By {username}</p>
 

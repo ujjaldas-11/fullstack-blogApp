@@ -1,19 +1,41 @@
+'use client';
 import { createPost } from "@/server/actions/posts"
+import { useState } from "react";
+import QuillEditor from "@/components/QuillEditor";
 
 export const dynamic = 'force-dynamic';
 
 export default function writePage() {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+
+    const handleSubmit = async (e)=> {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+
+        await createPost(formData);
+    }
+
+
     return (
         <div className="max-w-4xl mx-auto p-8">
             <h1 className="text-3xl font-bold mb-8">write tour post</h1>
 
-            <form action={createPost} className="space-y-6">
+            <form 
+                // action={createPost}
+                onSubmit={handleSubmit}
+                className="space-y-6"
+            >
                 <div>
                     <label>Title</label>
                     <input
                         name="title"
                         id="title"
                         type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter your post title.."
@@ -21,16 +43,8 @@ export default function writePage() {
                 </div>
 
                 <div>
-                    <label>Content, (markdown supported!)</label>
-                    <textarea
-                        name="content"
-                        id="content"
-                        type="text"
-                        rows="15"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="# Your Markdown content here...\n\n**Bold**, *italic*, lists, code blocks, etc."
-                    />
+                    <label className="block text-lg font-medium mb-2">Content</label>
+                    <QuillEditor value={content} onChange={setContent}/>
                 </div>
 
                 <button type="submit"
