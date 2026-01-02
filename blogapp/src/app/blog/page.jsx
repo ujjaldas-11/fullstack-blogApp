@@ -1,6 +1,7 @@
 import React from 'react'
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import AuthGreeting from '@/components/AuthGreeting';
 
 
 export const dynamic = 'force-dynamic';
@@ -54,16 +55,14 @@ export default async function BlogPage() {
 
     return (
         <div className='text-center mb-8'>
-            {isLoggedIn ? (
-                <p><a href="/write">hello {posts.username} </a></p>
-            ) : (
-                <p><a href="/login">Log in</a> to write posts</p>
-            )}
+            <div className='text-center'>
+                <AuthGreeting />
+            </div>
             <h1 className='text-4xl font-bold text-center mt-10'>Blog page</h1>
             <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post) => (
                     <div key={post.id} className='h-[30vh] bg-white text-black border rounded-2xl w-[300px] m-10 p-4 '>
-                        <a href={`/blog/${post.slug}`} className='no-underline'>
+                        <a href={`/blog/${post.id}`} className='no-underline'>
                             <h2 className='text-center font-bold'>{post.title}</h2>
                         </a>
                         <div
@@ -75,9 +74,18 @@ export default async function BlogPage() {
                     </div>
                 ))}
             </div>
-            <button className='p-4 text-white text-center bg-blue-600 rounded-lg font-semibold cursor-pointer'>
-                <a href='/write' className='hover-underline'>write a new post</a>
-            </button>
+
+            isLoggedIn && (
+            <div className="fixed bottom-8 right-8">
+                <a
+                    href="/write"
+                    className="bg-blue-600 text-white px-8 py-4 rounded-full shadow-2xl hover:bg-blue-700 transition text-lg font-semibold"
+                >
+                    + New Post
+                </a>
+            </div>
+            )
+
         </div>
     )
 }

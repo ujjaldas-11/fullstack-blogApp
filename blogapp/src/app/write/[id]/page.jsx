@@ -65,7 +65,7 @@ export default function EditPost({ params }) {
                 .replace(/-+/g, '-')
                 .trim('-');
 
-            window.location.href = `/blog/${newSlug}`;
+            window.location.href = `/blog`;
         }
     };
 
