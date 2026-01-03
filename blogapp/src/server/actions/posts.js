@@ -36,7 +36,7 @@ export async function createPost(formData) {
     }
 
     revalidatePath('/blog');
-    redirect(`/blog/${data.slug}`);
+    redirect(`/blog/${slug}`);
     return {success: true};
 }
 

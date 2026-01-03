@@ -62,19 +62,21 @@ export default async function BlogPage() {
             <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post) => (
                     <div key={post.id} className='h-[30vh] bg-white text-black border rounded-2xl w-[300px] m-10 p-4 '>
-                        <a href={`/blog/${post.id}`} className='no-underline'>
+                        <a href={`/blog/${post.slug}`} className='no-underline'>
                             <h2 className='text-center font-bold'>{post.title}</h2>
                         </a>
                         <div
                             className="prose prose-lg max-w-none h-[15vh] overflow-hidden"
                             dangerouslySetInnerHTML={{ __html: post.content }}
                         />
-                        <span>By {post.username || 'Anonymous'}</span>
-                        <p className='text-gray-500 text-sm text-right'>{new Date(post.created_at).toLocaleDateString()}</p>
+                        <div className='flex justify-between items-center mt-5'>
+                        <span className='text-gray-900 text-sm text-left font-bold'>By {post.username || 'Anonymous'}</span>
+                        <p className='text-gray-800 text-sm text-right font-semibold'>{new Date(post.created_at).toLocaleDateString()}</p>
+                        </div>
                     </div>
                 ))}
             </div>
-
+            {
             isLoggedIn && (
             <div className="fixed bottom-8 right-8">
                 <a
@@ -85,7 +87,7 @@ export default async function BlogPage() {
                 </a>
             </div>
             )
-
+        }
         </div>
     )
 }

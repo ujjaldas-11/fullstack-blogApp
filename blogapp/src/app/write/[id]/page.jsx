@@ -1,5 +1,5 @@
 'use client';
-// import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 // import { notFound } from "next/navigation";
 import React from "react";
 import { updatePost } from "@/server/actions/posts";
