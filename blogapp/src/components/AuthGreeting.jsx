@@ -43,7 +43,7 @@ export default function AuthGreeting() {
 
   return (
     <p className="text-xl mb-8">
-      <a href="/login" className="text-blue-600 hover:underline font-medium">
+      <a href="/login" className="text-red-600 hover:underline font-medium">
         Log in
       </a> to write posts
     </p>

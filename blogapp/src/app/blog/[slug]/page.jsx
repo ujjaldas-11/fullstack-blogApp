@@ -53,17 +53,16 @@ export default async function PostPage({ params }) {
                     day: 'numeric',
                 })}
             </time>
-            {/* <div className="mt-8">
-                <p>{post.content}</p>
-                </div> */}
 
             <div
                 className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                style={{ maxWidth: '100%' }}
+                dangerouslySetInnerHTML={{
+                    __html: post.content.replace(/<img/g, '<img style="max-width:130%; height:250px; border-radius:8px;"')
+                }}
             />
 
-
-            <p>By {username}</p>
+            <p>Posted By {username}</p>
 
             {isOwner && (
 
@@ -77,7 +76,6 @@ export default async function PostPage({ params }) {
                     </a>
 
                     {/* delete post from components */}
-
                     <DeletePostButtno slug={post.slug} />
                 </div>
             )}
