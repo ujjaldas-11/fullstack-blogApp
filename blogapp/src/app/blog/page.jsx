@@ -61,14 +61,15 @@ export default async function BlogPage() {
             <h1 className='text-4xl font-bold text-center mt-10'>Blog page</h1>
             <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post) => (
-                    <div key={post.id} className='h-100% bg-white text-black border rounded-2xl w-[300px] m-10 p-2 '>
+                    <div key={post.id} className='h-[30vh] bg-white text-black border rounded-2xl w-[300px] m-10 p-2 overflow-hidden'>
                         <a href={`/blog/${post.slug}`} className='no-underline'>
                             <h2 className='text-center font-bold'>{post.title}</h2>
                         </a>
 
 
                         <div
-                            className="prose prose-lg max-w-none text-center overflow-hidden"
+                            className="prose prose-lg max-w-none text-center overflow-hidden
+                            "
                             style={{ maxWidth: '100%' }}
                             dangerouslySetInnerHTML={{
                                 __html: post.content.replace(/<img/g, '<img style="width: 100vw; height:20vh; border-radius:8px;"')
