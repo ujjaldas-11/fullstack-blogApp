@@ -28,7 +28,7 @@ export default async function Navbar() {
                                 href="/write"
                                 className='text-gray-600 dark:text-gray-300'
                             >
-                                <button className='bg-blue-600 hover:bg-blue-700 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'>
+                                <button className='bg-black hover:bg-gray-900 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'>
                                     write
                                 </button>
                             </Link>

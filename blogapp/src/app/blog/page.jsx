@@ -2,7 +2,7 @@ import React from 'react'
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import AuthGreeting from '@/components/AuthGreeting';
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const dynamic = 'force-dynamic';
 
@@ -61,27 +61,46 @@ export default async function BlogPage() {
             <h1 className='text-4xl font-bold text-center mt-10'>Blog page</h1>
             <div className='w-full grid grid-cols-3 gap-2'>
                 {posts.map((post) => (
-                    <div key={post.id} className='h-[30vh] bg-white text-black border rounded-2xl w-[300px] m-10 p-2 overflow-hidden'>
-                        <a href={`/blog/${post.slug}`} className='no-underline'>
-                            <h2 className='text-center font-bold'>{post.title}</h2>
-                        </a>
+                    // <div key={post.id} className='h-[30vh] bg-white text-black border rounded-2xl w-[300px] m-10 p-2 overflow-hidden'>
+                    //     <a href={`/blog/${post.slug}`} className='no-underline'>
+                    //         <h2 className='text-center font-bold'>{post.title}</h2>
+                    //     </a>
 
 
-                        <div
-                            className="prose prose-lg max-w-none text-center overflow-hidden
-                            "
+
+                    //     <div className='flex justify-between items-center mt-5'>
+                    //         <span className='text-gray-900 text-sm text-left font-bold'>By {post.username || 'Anonymous'}</span>
+                    //         <p className='text-gray-600 text-sm text-right font-semibold'>{new Date(post.created_at).toLocaleDateString()}</p>
+                    //     </div>
+                    // </div>
+
+                    <Card key={post.id} className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                            <a href={`blog/${post.slug}`}>
+                                <CardTitle>{post.title}</CardTitle>
+                            </a>
+                            <CardDescription>
+                                By {post.username} • {new Date(post.created_at).toLocaleDateString()}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent
+                            className="overflow-hidden h-[20vh] w-100%"
                             style={{ maxWidth: '100%' }}
                             dangerouslySetInnerHTML={{
                                 __html: post.content.replace(/<img/g, '<img style="width: 100vw; height:20vh; border-radius:8px;"')
                             }}
                         />
+                        {/* <div
+                                className="prose prose-lg max-w-none text-center overflow-hidden
+                                                    "
+                                style={{ maxWidth: '100%' }}
+                                dangerouslySetInnerHTML={{
+                                    __html: post.content.replace(/<img/g, '<img style="width: 100vw; height:20vh; border-radius:8px;"')
+                                }}
+                            /> */}
 
-
-                        <div className='flex justify-between items-center mt-5'>
-                            <span className='text-gray-900 text-sm text-left font-bold'>By {post.username || 'Anonymous'}</span>
-                            <p className='text-gray-600 text-sm text-right font-semibold'>{new Date(post.created_at).toLocaleDateString()}</p>
-                        </div>
-                    </div>
+                        {/* </CardContent> */}
+                    </Card>
                 ))}
             </div>
             {
