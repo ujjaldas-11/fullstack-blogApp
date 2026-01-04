@@ -12,7 +12,10 @@ export async function createPost(formData) {
     const supabase = await createSupabaseServerClient();
     const {data: {user}} = await supabase.auth.getUser();
 
-    if(!user) throw new Error('Unauthorized');
+    if(!user) {
+        throw new Error('Unauthorized');
+        // alert('you are unauthorized!');                                     w
+    } 
 
     const title = formData.get('title');
     const content = formData.get('content');
@@ -37,7 +40,7 @@ export async function createPost(formData) {
 
     revalidatePath('/blog');
     redirect(`/blog/${slug}`);
-    return {success: true};
+    // return {success: true};
 }
 
 export async function updatePost(formData) {
