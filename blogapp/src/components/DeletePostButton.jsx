@@ -14,7 +14,7 @@ export default function DeletePostButtno({ slug }) {
         <form action={handleDelete}>
             <button
                 type="submit"
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition cursor-pointer"
+                className="px-4 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition cursor-pointer"
             >
                 Delete Post
             </button>

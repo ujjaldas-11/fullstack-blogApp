@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +23,7 @@ export default async function HomePage() {
           Welcome to My Blog
         </h1>
         <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-          Thoughts on web development, technology, cricket, and everything in between. 
+          Thoughts on web development, technology, cricket, and everything in between.
           Powered by Next.js, Supabase, and AI.
         </p>
         <Link
@@ -39,21 +41,23 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {posts.map((post) => (
               <Link href={`/blog/${post.slug}`} key={post.id} className="block">
-                <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow p-6 border border-gray-200">
-                  <h3 className="text-2xl font-bold mb-3 text-gray-900">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {post.content.replace(/<[^>]*>/g, '').substring(0, 150)}...
-                  </p>
-                  <time className="text-sm text-gray-500">
-                    {new Date(post.created_at).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </time>
-                </div>
+                <Card key={post.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <Link href={`blog/${post.slug}`}>
+                      <CardTitle>{post.title}</CardTitle>
+                    </Link>
+                    <CardDescription>
+                      By {post.username} • {new Date(post.created_at).toLocaleDateString()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent
+                    className="overflow-hidden h-[20vh] w-100%"
+                    style={{ maxWidth: '100%' }}
+                    dangerouslySetInnerHTML={{
+                      __html: post.content.replace(/<img/g, '<img style="width: 100vw; height:20vh; border-radius:8px;"')
+                    }}
+                  />
+                </Card>
               </Link>
             ))}
           </div>

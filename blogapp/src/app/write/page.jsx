@@ -3,6 +3,8 @@ import { createPost } from "@/server/actions/posts"
 import { useState } from "react";
 import QuillEditor from "@/components/QuillEditor";
 import { GeneratePostContent } from "@/server/actions/GeneratePostContent";
+import { Button } from "@/components/ui/button";
+import { Pointer } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -93,8 +95,9 @@ export default function writePage() {
                     <QuillEditor value={content} onChange={setContent} />
                 </div>
 
-                <button type="submit"
-                    className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">publish post</button>
+                <Button type="submit" className={Pointer}>
+                    publish post
+                    </Button>
             </form>
         </div>
     )

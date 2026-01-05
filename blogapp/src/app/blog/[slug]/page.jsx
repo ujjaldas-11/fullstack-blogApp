@@ -1,9 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm";
 import DeletePostButtno from "@/components/DeletePostButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +36,7 @@ export default async function PostPage({ params }) {
 
         if (profile?.username) {
             username = profile.username;
+        
         }
     }
 
@@ -68,12 +68,14 @@ export default async function PostPage({ params }) {
 
 
                 <div className="flex gap-4 mt-10">
-                    <a
-                        href={`/write/${post.id}`}
-                        className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition cursor-pointer"
-                    >
-                        Edit Post
-                    </a>
+                    <Button>
+                        <a
+                            href={`/write/${post.id}`}
+                            className="px-4 py-2 rounded-lg  cursor-pointer"
+                        >
+                            Edit Post
+                        </a>
+                    </Button>
 
                     {/* delete post from components */}
                     <DeletePostButtno slug={post.slug} />

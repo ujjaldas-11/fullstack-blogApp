@@ -6,6 +6,9 @@ import { updatePost } from "@/server/actions/posts";
 import { useState, useEffect } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import QuillEditor from "@/components/QuillEditor";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 export const dynamic = 'force-dynamic';
 
@@ -70,7 +73,15 @@ export default function EditPost({ params }) {
     };
 
     if (loading) {
-        return <p className="text-gray-700 textt-center p-8 text-xl">Loading...</p>
+        return (
+            <div className="flex flex-col space-y-3 justify-center items-center">
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                </div>
+                <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+            </div>
+        );
     }
 
     return (
@@ -100,20 +111,18 @@ export default function EditPost({ params }) {
                 </div>
 
                 <div className="flex gap-4">
-                    <button
+                    <Button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
                     >
                         {loading ? 'Updating...' : 'Upadet Post'}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="submit"
                         onClick={() => window.history.back()}
-                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition cursor-pointer"
                     >
                         Cencel
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

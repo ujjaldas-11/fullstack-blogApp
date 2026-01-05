@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,28 +18,28 @@ export default async function Navbar() {
 
 
     return (
-        <nav className='border-b text-white bg-white dark:bg-gray-800'>
+        <nav className='border-b dark:bg-gray-800'>
             <div className='w-full px-4 py-4 flex justify-between items-center'>
-                <Link href="/blog">My blog</Link>
+                <Link href="/" className='text-lg font-bold'>MyBlog</Link>
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
                             <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span>
                             <Link
                                 href="/write"
-                                className='text-gray-600 dark:text-gray-300'
+                                className='cursor-pointer'
                             >
-                                <button className='bg-black hover:bg-gray-900 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'>
+                                <Button
+                                >
                                     write
-                                </button>
+                                </Button>
                             </Link>
 
 
                             <form action={handleLogout}>
-                                <button
+                                <Button
                                     type='submit'
-                                    className='bg-red-600 hover:bg-red-700 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'
-                                >Log Out</button>
+                                >Log Out</Button>
                             </form>
 
                         </div>
@@ -46,9 +47,10 @@ export default async function Navbar() {
                         <>
                             <Link
                                 href="/login"
-                                className='bg-red-600 hover:bg-red-700 px-4 py-2 border rounded-lg text-white font-semibold cursor-pointer'
                             >
-                                Log In
+                                <Button>
+                                    Log In
+                                </Button>
                             </Link>
                         </>
                     )}

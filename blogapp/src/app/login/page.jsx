@@ -2,6 +2,18 @@
 
 import { useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -33,7 +45,7 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      
+
       if (data?.user) {
         const { error: profileError } = await supabase
           .from('profiles')
@@ -65,51 +77,74 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8 mt-20 bg-white rounded-xl shadow-lg">
+    <Card className="max-w-md mx-auto p-8 mt-10">
       <h1 className="text-3xl font-bold mb-8 text-center">
         {isSignUp ? 'Create Account' : 'Welcome Back'}
       </h1>
 
-      <form onSubmit={handleAuth} className="space-y-6">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <CardHeader>
+        <CardTitle>{isSignUp ? "Create your account" : "Login to your account"}</CardTitle>
+        <CardDescription>
+          {isSignUp ? "Enter your email below to create to your account" :
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+            "Enter your email below to login to your account"}
+        </CardDescription>
+      </CardHeader>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition"
-        >
-          {loading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Log In')}
-        </button>
+
+      <form onSubmit={handleAuth} >
+        <div className='flex flex-col gap-6 ml-6 mr-7'>
+
+          <div className='grid gap-2'>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className='grid gap-2'>
+
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        <CardFooter className='flex-col gap-2'>
+
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-4"
+          >
+            {loading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Log In')}
+          </Button>
+
+          <CardAction>
+            {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+            <Button
+              variant='link'
+              type="button"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className='text-md'
+            >
+              {isSignUp ? 'Log In' : 'Sign Up'}
+            </Button>
+          </CardAction>
+        </CardFooter>
+
       </form>
-
-      <p className="text-center mt-6 text-gray-600">
-        {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-        <button
-          type="button"
-          onClick={() => setIsSignUp(!isSignUp)}
-          className="text-blue-600 font-medium hover:underline"
-        >
-          {isSignUp ? 'Log In' : 'Sign Up'}
-        </button>
-      </p>
-    </div>
+    </Card>
   );
 }
