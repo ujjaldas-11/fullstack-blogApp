@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import QuillEditor from "@/components/QuillEditor";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton"
 
 
@@ -91,22 +93,22 @@ export default function EditPost({ params }) {
             <form
                 onSubmit={handleSubmit}
                 className="space-y-6">
-                <input type="hidden" name="slug" value={slug} />
-                <div>
-                    <label>Title</label>
-                    <input
+                <Input type="hidden" name="slug" value={slug} />
+                <div className="grid gap-2">
+                    <Label className='font-semibold text-md'>Title</Label>
+                    <Input
                         name="title"
                         id="title"
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-lg font-medium mb-2">Content</label>
+                    <Label className="block text-lg font-medium mb-2">Content</Label>
                     <QuillEditor value={content} onChange={setContent} />
                 </div>
 

@@ -43,9 +43,7 @@ export default async function HomePage() {
               <Link href={`/blog/${post.slug}`} key={post.id} className="block">
                 <Card key={post.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <Link href={`blog/${post.slug}`}>
-                      <CardTitle>{post.title}</CardTitle>
-                    </Link>
+                    <CardTitle>{post.title}</CardTitle>
                     <CardDescription>
                       By {post.username} • {new Date(post.created_at).toLocaleDateString()}
                     </CardDescription>

@@ -3,6 +3,15 @@ import { notFound } from "next/navigation";
 import DeletePostButtno from "@/components/DeletePostButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardDescription,
+    CardAction,
+    CardContent,
+    CardHeader,
+    CardFooter,
+    CardTitle
+} from "@/components/ui/card";
 
 export const dynamic = 'force-dynamic';
 
@@ -36,7 +45,7 @@ export default async function PostPage({ params }) {
 
         if (profile?.username) {
             username = profile.username;
-        
+
         }
     }
 
@@ -44,30 +53,35 @@ export default async function PostPage({ params }) {
 
 
     return (
-        <div className="max-w-4xl mx-auto p-8 prose prose-lg dark:prose-invert">
-            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-            <time className="text-gray-500 text-sm block mb-8">
-                {new Date(post.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                })}
-            </time>
+        <Card className="max-w-4xl mx-auto mt-10 mb-10 p-10">
+            <CardHeader className='flex flex-col'>
+                <CardAction className="text-4xl font-bold mb-4">{post.title}</CardAction>
 
-            <div
-                className="prose prose-lg max-w-none"
+                <CardDescription className='flex justify-between p-4 gap-2'>
+                    <CardAction>
+                        {new Date(post.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                    </CardAction>
+                    <CardAction>Author {username}</CardAction>
+                </CardDescription>
+            </CardHeader>
+
+            <CardContent
+                className="wrap-anywhere font-medium"
                 style={{ maxWidth: '100%' }}
                 dangerouslySetInnerHTML={{
-                    __html: post.content.replace(/<img/g, '<img style="max-width:130%; height:250px; border-radius:8px;"')
+                    __html: post.content.replace(/<img/g, '<img style="border-radius:8px;"')
                 }}
             />
 
-            <p>Posted By {username}</p>
 
             {isOwner && (
 
 
-                <div className="flex gap-4 mt-10">
+                <CardFooter className="flex gap-4 mt-10">
                     <Button>
                         <a
                             href={`/write/${post.id}`}
@@ -79,8 +93,8 @@ export default async function PostPage({ params }) {
 
                     {/* delete post from components */}
                     <DeletePostButtno slug={post.slug} />
-                </div>
+                </CardFooter>
             )}
-        </div>
+        </Card>
     );
 }
