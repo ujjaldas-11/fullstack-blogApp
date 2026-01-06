@@ -5,6 +5,9 @@ import QuillEditor from "@/components/QuillEditor";
 import { GeneratePostContent } from "@/server/actions/GeneratePostContent";
 import { Button } from "@/components/ui/button";
 import { Pointer } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Card, CardTitle } from "@/components/ui/card";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,26 +50,25 @@ export default function writePage() {
         <div className="max-w-4xl mx-auto p-8">
             <h1 className="text-3xl font-bold mb-8">write tour post</h1>
 
-            <div className="mb-8 p-6 bg-purple-50 rounded-lg border border-purple-200">
-                <h2 className="text-xl font-semibold mb-4 text-purple-900">Generate with AI</h2>
+            <Card className="mb-8 p-6 bg-purple-100 rounded-lg border border-purple-200">
+                <CardTitle className="text-xl font-semibold mb-4 text-purple-900">Generate with AI</CardTitle>
                 <div className="flex gap-3">
-                    <input
+                    <Input
                         type="text"
                         value={aiPrompt}
                         onChange={(e) => setAiPromt(e.target.value)}
                         placeholder="e.g., A beginner's guide to Next.js in 2026"
-                        className="flex-1 px-4 py-3 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                         disabled={generating}
                     />
-                    <button
+                    <Button
                         onClick={handleGenerate}
                         disabled={generating || !aiPrompt.trim()}
                         className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:opacity-60 transition cursor-pointer"
                     >
                         {generating ? 'Generating...' : 'Generate Draft'}
-                    </button>
+                    </Button>
                 </div>
-            </div>
+            </Card>
 
 
 
@@ -76,9 +78,9 @@ export default function writePage() {
                 onSubmit={handleSubmit}
                 className="space-y-6"
             >
-                <div>
-                    <label>Title</label>
-                    <input
+                <div className="grid gap-2">
+                    <Label className='text-md font-semibold'>Title</Label>
+                    <Input
                         name="title"
                         id="title"
                         type="text"
@@ -91,7 +93,7 @@ export default function writePage() {
                 </div>
 
                 <div>
-                    <label className="block text-lg font-medium mb-2">Content</label>
+                    <Label className="block text-lg font-medium mb-2">Content</Label>
                     <QuillEditor value={content} onChange={setContent} />
                 </div>
 

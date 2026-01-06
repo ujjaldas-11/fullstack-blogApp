@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import { ModeToggle } from './themeButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,7 @@ export default async function Navbar() {
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
                             <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span>
+                            <ModeToggle />
                             <Link
                                 href="/write"
                                 className='cursor-pointer'
@@ -38,6 +40,7 @@ export default async function Navbar() {
 
                             <form action={handleLogout}>
                                 <Button
+                                    className='bg-red-600 text-white font-bold'
                                     type='submit'
                                 >Log Out</Button>
                             </form>
@@ -45,16 +48,18 @@ export default async function Navbar() {
                         </div>
                     ) : (
                         <>
+                            <ModeToggle />
                             <Link
                                 href="/login"
                             >
-                                <Button>
+                                <Button className='bg-red-600 text-white font-bold'>
                                     Log In
                                 </Button>
                             </Link>
                         </>
                     )}
                 </div>
+
             </div>
         </nav>
     )

@@ -83,7 +83,7 @@ export default function QuillEditor({ value = '', onChange }) {
   ];
 
   return (
-    <div className="bg-white rounded-lg border border-gray-300 shadow-sm">
+    <div className="border rounded-lg">
       <ReactQuill
         ref={quillRef}
         theme="snow"
@@ -92,8 +92,9 @@ export default function QuillEditor({ value = '', onChange }) {
         modules={modules}
         formats={formats}
         placeholder="Start writing your amazing post..."
-        className="min-h-[400px]"
+        // className="min-h-[400px]"
       />
     </div>
   );
 }
+
