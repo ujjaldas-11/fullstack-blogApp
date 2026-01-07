@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { ModeToggle } from './themeButton';
 
+
 export const dynamic = 'force-dynamic';
 
 
@@ -18,10 +19,15 @@ export default async function Navbar() {
     };
 
 
+
     return (
-        <nav className='border-b dark:bg-gray-800'>
+        <nav className='fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/70 dark:bg-gray-900/70'>
             <div className='w-full px-4 py-4 flex justify-between items-center'>
-                <Link href="/" className='text-lg font-bold'>MyBlog</Link>
+                <Link href="/" className='text-lg font-bold'>
+                    <img
+                     src='/EasyWrite.png' 
+                     alt="EasyWrite" width={70} height={30}/>
+                </Link>
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>

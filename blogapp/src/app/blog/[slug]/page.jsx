@@ -15,6 +15,8 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+
+
 export default async function PostPage({ params }) {
 
     const supabase = await createSupabaseServerClient();
@@ -26,7 +28,7 @@ export default async function PostPage({ params }) {
     // Fetch the post
     const { data: post, error } = await supabase
         .from('posts')
-        .select('id, title, content, slug, created_at, author_id')
+        .select('id, title, content, slug, created_at, author_id, featured_image')
         .eq('slug', slug)
         .single();
 
@@ -51,9 +53,21 @@ export default async function PostPage({ params }) {
 
     const isOwner = user && user.id === post.author_id;
 
+    let displayImage = post.featured_image;
+    if (!displayImage) {
+        const imageMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        displayImage = imageMatch ? imageMatch[1] : null;
+    }
+
+    // Clean content (remove first image if it's the featured one)
+    let cleanContent = post.content;
+    if (displayImage && !post.featured_image) {
+        cleanContent = cleanContent.replace(/<img[^>]*>/, '').trim();
+    }
+
 
     return (
-        <Card className="max-w-4xl mx-auto mt-10 mb-10 p-10">
+        <Card className="max-w-4xl mx-auto mt-30 mb-10 p-10">
             <CardHeader className='flex flex-col'>
                 <CardAction className="text-4xl font-bold mb-4">{post.title}</CardAction>
 
@@ -69,11 +83,21 @@ export default async function PostPage({ params }) {
                 </CardDescription>
             </CardHeader>
 
+            {displayImage && (
+                <div className="mb-12 -mx-4">
+                    <img
+                        src={displayImage}
+                        alt={post.title}
+                        className="w-full h-96 object-cover rounded-xl shadow-lg"
+                    />
+                </div>
+            )}
+
             <CardContent
-                className="wrap-anywhere font-medium"
-                style={{ maxWidth: '100%' }}
+                className="wrap-anywhere font-medium overflow-auto h-[40vh]"
+                // style={{ maxWidth: '100%' }}
                 dangerouslySetInnerHTML={{
-                    __html: post.content.replace(/<img/g, '<img style="border-radius:8px;"')
+                    __html: cleanContent
                 }}
             />
 

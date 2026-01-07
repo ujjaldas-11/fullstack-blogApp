@@ -21,6 +21,8 @@ export default function EditPost({ params }) {
     const [content, setContent] = useState('');
     const [slug, setSlug] = useState('');
     const [loading, setLoading] = useState(true);
+    // const [featuredImage, setFeaturedImage] = useState(null)
+    // const [uploading, setUploading] = useState(false);
 
     const supabase = createSupabaseBrowserClient();
 
@@ -46,6 +48,34 @@ export default function EditPost({ params }) {
 
         fetchPost();
     }, [id, supabase]);
+
+    // const handleImageUpload = async (e) => {
+    //     const file = e.target.files[0];
+    //     if (!file) return;
+
+    //     setUploading(true);
+
+    //     const fileExt = file.name.split('.').pop();
+    //     const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+    //     const filePath = fileName;
+
+    //     const { error } = await supabase.storage
+    //         .from('post-images')
+    //         .upload(filePath, file);
+
+    //     if (error) {
+    //         alert('Upload failed: ' + error.message);
+    //         setUploading(false);
+    //         return;
+    //     }
+
+    //     const { data: { publicUrl } } = supabase.storage
+    //         .from('post-images')
+    //         .getPublicUrl(filePath);
+
+    //     setFeaturedImage(publicUrl);
+    //     setUploading(false);
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -76,10 +106,10 @@ export default function EditPost({ params }) {
 
     if (loading) {
         return (
-            <div className="flex flex-col space-y-3 justify-center items-center">
+            <div className="flex flex-col space-y-3 justify-center items-center mt-30">
                 <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-10 w-[250px]" />
+                    <Skeleton className="h-10 w-[200px]" />
                 </div>
                 <Skeleton className="h-[125px] w-[250px] rounded-xl" />
             </div>
@@ -87,7 +117,7 @@ export default function EditPost({ params }) {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-8">
+        <div className="max-w-4xl mx-auto p-8 mt-30">
             <h1 className="text-3xl font-bold mb-8">Edit post</h1>
 
             <form
@@ -106,6 +136,31 @@ export default function EditPost({ params }) {
                         className="w-full p-4"
                     />
                 </div>
+
+                {/* <div>
+                    <label className="block text-lg font-medium mb-3">Cover Image (Optional)</label>
+                    <div className="flex items-center gap-4">
+                        <label className="cursor-pointer">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                disabled={uploading}
+                                className="hidden"
+                            />
+                            <div className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                {uploading ? 'Uploading...' : 'Choose Image'}
+                            </div>
+                        </label>
+                        {featuredImage && (
+                            <img
+                                src={featuredImage}
+                                alt="Preview"
+                                className="h-32 rounded-lg object-cover shadow"
+                            />
+                        )}
+                    </div>
+                </div> */}
 
                 <div>
                     <Label className="block text-lg font-medium mb-2">Content</Label>

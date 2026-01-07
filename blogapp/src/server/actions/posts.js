@@ -19,6 +19,7 @@ export async function createPost(formData) {
 
     const title = formData.get('title');
     const content = formData.get('content');
+    const featured_image = formData.get('featured_image') || null; 
 
     const slug = title
     .toLowerCase()
@@ -29,7 +30,7 @@ export async function createPost(formData) {
 
     const {data, error} = await supabase
         .from('posts')
-        .insert({title, content, slug, author_id: user.id})
+        .insert({title, content, slug, author_id: user.id, featured_image,})
         .select()
         .single();
     
