@@ -11,10 +11,9 @@ export default async function BlogPage() {
 
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Fetch posts
     const { data: posts, error } = await supabase
         .from('posts')
-        .select('id, title, content, slug, created_at, author_id')
+        .select('id, title, content, slug, created_at, author_id, featured_image')
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -46,37 +45,24 @@ export default async function BlogPage() {
         }
     }
 
-    // Add username & featured image preview to each post
-    const postsWithData = posts.map(post => {
-        const imageMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
-        return {
-            ...post,
-            username: authorMap[post.author_id] || 'Anonymous',
-            featuredImage: imageMatch ? imageMatch[1] : null,
-            // Remove first image from content preview
-            previewContent: imageMatch
-                ? post.content.replace(/<img[^>]*>/, '').trim()
-                : post.content,
-        };
-    });
+    // Add username to each post
+    const postsWithData = posts.map(post => ({
+        ...post,
+        username: authorMap[post.author_id] || 'Anonymous',
+    }));
 
     return (
-        <div className="max-w-7xl mx-auto p-8">
-            {/* Greeting */}
+        <div className="max-w-7xl mx-auto p-8 mt-30">
             <div className="text-center mb-12">
                 <AuthGreeting />
             </div>
 
             <h1 className="text-5xl font-bold text-center mb-16">My Blog</h1>
 
-            {/* Posts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {postsWithData.map((post) => (
                     <Link href={`/blog/${post.slug}`} key={post.id}>
-                        <Card
-                        //  className="hover:shadow-xl transition-shadow overflow-hidden"
-                        >
-
+                        <Card className="hover:shadow-xl transition-shadow overflow-hidden h-full">
                             <CardHeader>
                                 <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
                                 <CardDescription>
@@ -87,29 +73,28 @@ export default async function BlogPage() {
                                     })}
                                 </CardDescription>
                             </CardHeader>
-                            <CardContent>
+                            {/* Display featured image if it exists */}
+                            <div className='rounded-lg p-4'>
+                                {post.featured_image && (
+                                    <img
+                                        src={post.featured_image}
+                                        alt={post.title}
+                                        className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
+                                    />
+                                )}
+                            </div>
 
-                                <div>
-                                    {post.featuredImage && (
-                                        <img
-                                            src={post.featuredImage}
-                                            alt={post.title}
-                                            className="h-[20vh] w-full object-cover rounded-lg mb-2"
-                                        />
-                                    )}
-                                </div>
-
-                                {/* <div
+                            {/* <CardContent>
+                                <div
                                     className="text-sm text-gray-600 line-clamp-4"
-                                    dangerouslySetInnerHTML={{ __html: post.previewContent }}
-                                /> */}
-                            </CardContent>
+                                    dangerouslySetInnerHTML={{ __html: post.content }}
+                                />
+                            </CardContent> */}
                         </Card>
                     </Link>
                 ))}
             </div>
 
-            {/* Floating New Post Button */}
             <div className="fixed bottom-8 right-8">
                 <Button size="lg" className="rounded-full shadow-2xl">
                     <Link href="/write" className="flex items-center gap-2">

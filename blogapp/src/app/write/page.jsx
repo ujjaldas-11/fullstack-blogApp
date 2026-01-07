@@ -22,7 +22,6 @@ export default function writePage() {
 
     const supabase = createSupabaseBrowserClient()
 
-
     const handleGenerate = async () => {
         if (!aiPrompt.trim()) return;
         setGenerating(true);
@@ -38,12 +37,25 @@ export default function writePage() {
 
         setGenerating(false);
         setAiPromt('');
-
     }
 
     const handleImageUpload = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            alert('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+            return;
+        }
+
+        // Validate file size (5MB limit)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            alert('File size must be less than 5MB');
+            return;
+        }
 
         setUploading(true);
 
@@ -61,11 +73,12 @@ export default function writePage() {
             return;
         }
 
-        const { data: { publicUrl } } = supabase.storage
+        // Fixed: Correct way to get public URL
+        const { data } = supabase.storage
             .from('post-images')
             .getPublicUrl(filePath);
 
-        setFeaturedImage(publicUrl);
+        setFeaturedImage(data.publicUrl);
         setUploading(false);
     };
 
@@ -81,10 +94,9 @@ export default function writePage() {
         await createPost(formData);
     }
 
-
     return (
         <div className="max-w-4xl mx-auto p-8 mt-30">
-            <h1 className="text-3xl font-bold mb-8">write tour post</h1>
+            <h1 className="text-3xl font-bold mb-8">Write Your Post</h1>
 
             <Card className="mb-8 p-6">
                 <CardTitle className="text-xl font-semibold mb-4 text-purple-900">Generate with AI</CardTitle>
@@ -107,10 +119,7 @@ export default function writePage() {
                 </div>
             </Card>
 
-
-
             <form
-                // action={createPost}
                 onSubmit={handleSubmit}
                 className="space-y-6"
             >
@@ -128,25 +137,28 @@ export default function writePage() {
                     />
                 </div>
 
-
-
-                {/*  upload featured image */}
-
+                {/* Upload featured image */}
                 <div>
-                    <Label className="block text-lg font-medium mb-3">Cover Image (Optional)</Label>
+                    <label className="block text-lg font-medium mb-3">Cover Image (Optional)</label>
                     <div className="flex items-center gap-4">
-                        <Label className="cursor-pointer">
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                disabled={uploading}
-                                className="hidden"
-                            />
-                            <Button className="px-6">
-                                {uploading ? 'Uploading...' : 'Choose Image'}
-                            </Button>
-                        </Label>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            className="hidden"
+                            id="cover-image-input"
+                        />
+
+                        <label
+                            htmlFor="cover-image-input"
+                            className="cursor-pointer inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                            style={uploading ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+                        >
+                            {uploading ? 'Uploading...' : 'Choose Image'}
+                        </label>
+
                         {featuredImage && (
                             <div className="relative">
                                 <img
@@ -171,8 +183,9 @@ export default function writePage() {
                     <QuillEditor value={content} onChange={setContent} />
                 </div>
 
-                <Button type="submit" className={Pointer}>
-                    publish post
+                {/* Fixed: Button className should be a string */}
+                <Button type="submit" className="cursor-pointer">
+                    Publish Post
                 </Button>
             </form>
         </div>

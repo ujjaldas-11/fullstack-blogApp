@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +11,7 @@ export default async function HomePage() {
   // Fetch latest 3 posts for preview
   const { data: posts } = await supabase
     .from('posts')
-    .select('id, title, slug, created_at, content')
+    .select('id, title, slug, created_at, content, featured_image')
     .order('created_at', { ascending: false })
     .limit(3);
 
@@ -48,13 +48,17 @@ export default async function HomePage() {
                       By {post.username} • {new Date(post.created_at).toLocaleDateString()}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent
-                    className="overflow-hidden h-[20vh] w-100%"
-                    style={{ maxWidth: '100%' }}
-                    dangerouslySetInnerHTML={{
-                      __html: post.content.replace(/<img/g, '<img style="width: 100vw; height:20vh; border-radius:8px;"')
-                    }}
-                  />
+
+                  <div className='rounded-lg p-4'>
+                    {post.featured_image && (
+                                    <img
+                                        src={post.featured_image}
+                                        alt={post.title}
+                                        className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
+                                    />
+                            )}
+                  </div>
+
                 </Card>
               </Link>
             ))}

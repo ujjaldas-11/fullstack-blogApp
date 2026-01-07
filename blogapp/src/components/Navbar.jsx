@@ -24,9 +24,10 @@ export default async function Navbar() {
         <nav className='fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/70 dark:bg-gray-900/70'>
             <div className='w-full px-4 py-4 flex justify-between items-center'>
                 <Link href="/" className='text-lg font-bold'>
-                    <img
+                    {/* <img
                      src='/EasyWrite.png' 
-                     alt="EasyWrite" width={70} height={30}/>
+                     alt="EasyWrite" width={70} height={30}/> */}
+                     EasyWrite
                 </Link>
                 <div>
                     {user ? (

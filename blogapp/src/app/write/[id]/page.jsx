@@ -21,8 +21,8 @@ export default function EditPost({ params }) {
     const [content, setContent] = useState('');
     const [slug, setSlug] = useState('');
     const [loading, setLoading] = useState(true);
-    // const [featuredImage, setFeaturedImage] = useState(null)
-    // const [uploading, setUploading] = useState(false);
+    const [featuredImage, setFeaturedImage] = useState('')
+    const [uploading, setUploading] = useState(false);
 
     const supabase = createSupabaseBrowserClient();
 
@@ -43,39 +43,44 @@ export default function EditPost({ params }) {
             setTitle(post.title);
             setContent(post.content || '');
             setSlug(post.slug);
+            setFeaturedImage(post.featured_image || '')
             setLoading(false);
         };
 
         fetchPost();
     }, [id, supabase]);
 
-    // const handleImageUpload = async (e) => {
-    //     const file = e.target.files[0];
-    //     if (!file) return;
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
-    //     setUploading(true);
+        setUploading(true);
 
-    //     const fileExt = file.name.split('.').pop();
-    //     const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-    //     const filePath = fileName;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = fileName;
 
-    //     const { error } = await supabase.storage
-    //         .from('post-images')
-    //         .upload(filePath, file);
+        const { error } = await supabase.storage
+            .from('post-images')
+            .upload(filePath, file);
 
-    //     if (error) {
-    //         alert('Upload failed: ' + error.message);
-    //         setUploading(false);
-    //         return;
-    //     }
+        if (error) {
+            alert('Upload failed: ' + error.message);
+            setUploading(false);
+            return;
+        }
 
-    //     const { data: { publicUrl } } = supabase.storage
-    //         .from('post-images')
-    //         .getPublicUrl(filePath);
+        const { data } = supabase.storage
+            .from('post-images')
+            .getPublicUrl(filePath);
 
-    //     setFeaturedImage(publicUrl);
-    //     setUploading(false);
-    // };
+        setFeaturedImage(data.publicUrl);
+        setUploading(false);
+    };
+
+    const handleRemoveImage = () => {
+        setFeaturedImage('')
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,6 +91,7 @@ export default function EditPost({ params }) {
         formData.append('title', title);
         formData.append('content', content);
         formData.append('slug', slug);
+        formData.append('featured_image', featuredImage);
 
         const result = await updatePost(formData);
 
@@ -136,31 +142,47 @@ export default function EditPost({ params }) {
                         className="w-full p-4"
                     />
                 </div>
+                
 
-                {/* <div>
+                 <div>
                     <label className="block text-lg font-medium mb-3">Cover Image (Optional)</label>
                     <div className="flex items-center gap-4">
-                        <label className="cursor-pointer">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                disabled={uploading}
-                                className="hidden"
-                            />
-                            <div className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                                {uploading ? 'Uploading...' : 'Choose Image'}
-                            </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            className="hidden"
+                            id="cover-image-input"
+                        />
+                        
+                        <label
+                            htmlFor="cover-image-input"
+                            className="cursor-pointer inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                            style={uploading ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+                        >
+                            {uploading ? 'Uploading...' : featuredImage ? 'Change Image' : 'Choose Image'}
                         </label>
+
                         {featuredImage && (
-                            <img
-                                src={featuredImage}
-                                alt="Preview"
-                                className="h-32 rounded-lg object-cover shadow"
-                            />
+                            <div className="relative">
+                                <img
+                                    src={featuredImage}
+                                    alt="Cover preview"
+                                    className="h-48 w-80 object-cover rounded-lg shadow-lg"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleRemoveImage}
+                                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 transition"
+                                >
+                                    ×
+                                </button>
+                            </div>
                         )}
                     </div>
-                </div> */}
+                </div>
+
 
                 <div>
                     <Label className="block text-lg font-medium mb-2">Content</Label>

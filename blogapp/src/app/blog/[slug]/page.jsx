@@ -10,7 +10,6 @@ import {
     CardContent,
     CardHeader,
     CardFooter,
-    CardTitle
 } from "@/components/ui/card";
 
 export const dynamic = 'force-dynamic';
@@ -53,17 +52,16 @@ export default async function PostPage({ params }) {
 
     const isOwner = user && user.id === post.author_id;
 
-    let displayImage = post.featured_image;
-    if (!displayImage) {
-        const imageMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
-        displayImage = imageMatch ? imageMatch[1] : null;
-    }
+    // let displayImage = post.featured_image;
+    // if (!displayImage) {
+    //     const imageMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+    //     displayImage = imageMatch ? imageMatch[1] : null;
+    // }
 
-    // Clean content (remove first image if it's the featured one)
-    let cleanContent = post.content;
-    if (displayImage && !post.featured_image) {
-        cleanContent = cleanContent.replace(/<img[^>]*>/, '').trim();
-    }
+    // let cleanContent = post.content;
+    // if (displayImage && !post.featured_image) {
+    //     cleanContent = cleanContent.replace(/<img[^>]*>/, '').trim();
+    // }
 
 
     return (
@@ -83,10 +81,10 @@ export default async function PostPage({ params }) {
                 </CardDescription>
             </CardHeader>
 
-            {displayImage && (
+            {post.featured_image && (
                 <div className="mb-12 -mx-4">
                     <img
-                        src={displayImage}
+                        src={`${post.featured_image}?t=${new Date(post.updated_at || post.created_at).getTime()}`}
                         alt={post.title}
                         className="w-full h-96 object-cover rounded-xl shadow-lg"
                     />
@@ -97,7 +95,7 @@ export default async function PostPage({ params }) {
                 className="wrap-anywhere font-medium overflow-auto h-[40vh]"
                 // style={{ maxWidth: '100%' }}
                 dangerouslySetInnerHTML={{
-                    __html: cleanContent
+                    __html: post.content
                 }}
             />
 
