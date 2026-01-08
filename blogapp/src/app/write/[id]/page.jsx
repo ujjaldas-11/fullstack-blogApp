@@ -88,6 +88,7 @@ export default function EditPost({ params }) {
 
 
         const formData = new FormData();
+        formData.append('id', id);
         formData.append('title', title);
         formData.append('content', content);
         formData.append('slug', slug);
@@ -115,9 +116,9 @@ export default function EditPost({ params }) {
             <div className="flex flex-col space-y-3 justify-center items-center mt-30">
                 <div className="space-y-2">
                     <Skeleton className="h-10 w-[250px]" />
-                    <Skeleton className="h-10 w-[200px]" />
+                    <Skeleton className="h-10 w-[250px]" />
                 </div>
-                <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                <Skeleton className="h-[300px] w-[350px] rounded-xl" />
             </div>
         );
     }
@@ -156,13 +157,13 @@ export default function EditPost({ params }) {
                             id="cover-image-input"
                         />
                         
-                        <label
+                        {/* <label
                             htmlFor="cover-image-input"
                             className="cursor-pointer inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
                             style={uploading ? { opacity: 0.5, pointerEvents: 'none' } : {}}
                         >
                             {uploading ? 'Uploading...' : featuredImage ? 'Change Image' : 'Choose Image'}
-                        </label>
+                        </label> */}
 
                         {featuredImage && (
                             <div className="relative">
@@ -194,13 +195,13 @@ export default function EditPost({ params }) {
                         type="submit"
                         disabled={loading}
                     >
-                        {loading ? 'Updating...' : 'Upadet Post'}
+                        {loading ? 'updating...' : 'update Post'}
                     </Button>
                     <Button
-                        type="submit"
+                        type="button"
                         onClick={() => window.history.back()}
                     >
-                        Cencel
+                        Cancel
                     </Button>
                 </div>
             </form>

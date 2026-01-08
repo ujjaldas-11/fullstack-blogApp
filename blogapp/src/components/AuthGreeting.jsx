@@ -32,11 +32,11 @@ export default function AuthGreeting() {
 
   if (user) {
     return (
-      <p className="text-xl mb-8">
+      <p className="text-xl mb-2">
         Hello, <span className="font-semibold">{user.email}</span>! 
-        <a href="/write" className="ml-4 text-blue-600 hover:underline font-medium">
+        {/* <a href="/write" className="ml-4 text-blue-600 hover:underline font-medium">
           Write a new post →
-        </a>
+        </a> */}
       </p>
     );
   }

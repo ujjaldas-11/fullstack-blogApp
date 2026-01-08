@@ -25,14 +25,16 @@ export default async function Navbar() {
             <div className='w-full px-4 py-4 flex justify-between items-center'>
                 <Link href="/" className='text-lg font-bold'>
                     {/* <img
-                     src='/EasyWrite.png' 
-                     alt="EasyWrite" width={70} height={30}/> */}
+                     src='/logo.png' 
+                     alt="EasyWrite"
+                     className='h-[120px] w-[150px]'
+                    /> */}
                      EasyWrite
                 </Link>
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
-                            <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span>
+                            {/* <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span> */}
                             <ModeToggle />
                             <Link
                                 href="/write"

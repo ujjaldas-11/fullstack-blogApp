@@ -52,16 +52,6 @@ export default async function PostPage({ params }) {
 
     const isOwner = user && user.id === post.author_id;
 
-    // let displayImage = post.featured_image;
-    // if (!displayImage) {
-    //     const imageMatch = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
-    //     displayImage = imageMatch ? imageMatch[1] : null;
-    // }
-
-    // let cleanContent = post.content;
-    // if (displayImage && !post.featured_image) {
-    //     cleanContent = cleanContent.replace(/<img[^>]*>/, '').trim();
-    // }
 
 
     return (
