@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import AuthGreeting from '@/components/AuthGreeting';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -63,16 +63,7 @@ export default async function BlogPage() {
                 {postsWithData.map((post) => (
                     <Link href={`/blog/${post.slug}`} key={post.id}>
                         <Card className="hover:shadow-xl transition-shadow overflow-hidden h-full">
-                            <CardHeader>
-                                <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
-                                <CardDescription>
-                                    By {post.username} • {new Date(post.created_at).toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric'
-                                    })}
-                                </CardDescription>
-                            </CardHeader>
+
                             {/* Display featured image if it exists */}
                             <div className='rounded-lg p-4'>
                                 {post.featured_image && (
@@ -84,12 +75,16 @@ export default async function BlogPage() {
                                 )}
                             </div>
 
-                            {/* <CardContent>
-                                <div
-                                    className="text-sm text-gray-600 line-clamp-4"
-                                    dangerouslySetInnerHTML={{ __html: post.content }}
-                                />
-                            </CardContent> */}
+                            <CardHeader>
+                                <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
+                                <CardDescription className='text-md'>
+                                    By {post.username} • {new Date(post.created_at).toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    })}
+                                </CardDescription>
+                            </CardHeader>
                         </Card>
                     </Link>
                 ))}
