@@ -23,18 +23,19 @@ export default async function Navbar() {
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/70 dark:bg-gray-900/70'>
             <div className='w-full px-4 py-4 flex justify-between items-center'>
-                <Link href="/" className='text-lg font-bold'>
-                    {/* <img
-                     src='/logo.png' 
+                <Link href="/" className='flex justify-center items-center text-lg font-bold gap-2'>
+                    <img
+                     src='/logo.jpg' 
                      alt="EasyWrite"
-                     className='h-[120px] w-[150px]'
-                    /> */}
+                     className='h-[50px] w-[50px] rounded-full'
+                    />
+                    <p>
                      EasyWrite
+                    </p>
                 </Link>
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
-                            {/* <span className='text-gray-600 dark:text-gray-300'>hello, {user.email}</span> */}
                             <ModeToggle />
                             <Link
                                 href="/write"
@@ -56,16 +57,16 @@ export default async function Navbar() {
 
                         </div>
                     ) : (
-                        <>
+                        <div className='flex justify-center items-right gap-6'>
                             <ModeToggle />
                             <Link
                                 href="/login"
                             >
-                                <Button className='bg-red-600 text-white font-bold'>
+                                <Button className='font-bold'>
                                     Log In
                                 </Button>
                             </Link>
-                        </>
+                        </div>
                     )}
                 </div>
 
