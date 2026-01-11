@@ -53,7 +53,7 @@ export default async function BlogPage() {
     }));
 
     return (
-        <div className="max-w-7xl mx-auto p-8 mt-30">
+        <div className="max-w-7xl mx-auto p-8 mt-20">
 
             {/* <h1 className="text-5xl font-bold text-center mb-10">My Blog</h1> */}
             <div className="text-center mb-12">

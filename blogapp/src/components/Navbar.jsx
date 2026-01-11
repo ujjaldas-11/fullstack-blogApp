@@ -39,7 +39,7 @@ export default async function Navbar() {
 
 
                 <div
-                    className='flex justify-center items-center p-2 m-4  '>
+                    className='flex justify-center items-center p-2   '>
 
                     <Input
                         type="text"
