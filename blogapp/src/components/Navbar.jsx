@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { ModeToggle } from './themeButton';
+import { Input } from './ui/input';
 
 
 export const dynamic = 'force-dynamic';
@@ -25,14 +26,27 @@ export default async function Navbar() {
             <div className='w-full px-4 py-4 flex justify-between items-center'>
                 <Link href="/" className='flex justify-center items-center text-lg font-bold gap-2'>
                     <img
-                     src='/logo.jpg' 
-                     alt="EasyWrite"
-                     className='h-[50px] w-[50px] rounded-full'
+                        src='/logo.jpg'
+                        alt="EasyWrite"
+                        className='h-[50px] w-[50px] rounded-full'
                     />
                     <p>
-                     EasyWrite
+                        EasyWrite
                     </p>
                 </Link>
+
+                {/*search bar  */}
+
+
+                <div
+                    className='flex justify-center items-center p-2 m-4  '>
+
+                    <Input
+                        type="text"
+                        placeholder="search any blog..."
+                        className="w-[50vw] rounded-full" />
+                </div>
+
                 <div>
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
