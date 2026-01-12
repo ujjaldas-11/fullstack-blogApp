@@ -1,8 +1,8 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import AuthGreeting from '@/components/AuthGreeting';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import BlogCard from '@/components/BlogCard';
 
 
 export const dynamic = 'force-dynamic';
@@ -59,38 +59,11 @@ export default async function BlogPage() {
             <div className="text-center mb-12">
                 <AuthGreeting />
             </div>
-            
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {postsWithData.map((post) => (
-                    <Link href={`/blog/${post.slug}`} key={post.id}>
-                        <Card className="hover:shadow-xl transition-shadow overflow-hidden h-full">
 
-                            {/* Display featured image if it exists */}
-                            <div className='rounded-lg p-4'>
-                                {post.featured_image && (
-                                    <img
-                                        src={post.featured_image}
-                                        alt={post.title}
-                                        className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
-                                    />
-                                )}
-                            </div>
+            {/* Blog card component */}
 
-                            <CardHeader>
-                                <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
-                                <CardDescription className='text-md'>
-                                    By {post.username} • {new Date(post.created_at).toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric'
-                                    })}
-                                </CardDescription>
-                            </CardHeader>
-                        </Card>
-                    </Link>
-                ))}
-            </div>
+            <BlogCard posts={postsWithData} />
 
             <div className="fixed bottom-8 right-8">
                 <Button size="lg" className="rounded-full shadow-2xl">

@@ -1,13 +1,12 @@
-import Link from 'next/link';
+import React from 'react';
+import { Sparkles, Zap, Shield, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import BlogCard from '@/components/BlogCard';
 
-
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
+export default async function EasyWriteLanding() {
   const supabase = await createSupabaseServerClient();
-
   // Fetch latest 3 posts for preview
   const { data: posts } = await supabase
     .from('posts')
@@ -15,69 +14,181 @@ export default async function HomePage() {
     .order('created_at', { ascending: false })
     .limit(3);
 
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="max-w-6xl mx-auto p-8">
+    <div className="min-h-screen bg-background text-foreground mt-10">
       {/* Hero Section */}
-      <div className="text-center py-20">
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Welcome to My Blog
-        </h1>
-        <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-          Thoughts on web development, technology, cricket, and everything in between.
-          Powered by Next.js, Supabase, and AI.
-        </p>
-        <Link
-          href="/blog"
-          className="inline-block px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition shadow-lg"
-        >
-          Read Latest Posts →
-        </Link>
-      </div>
+      <section className="pt-20 pb-20 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="inline-block mb-6 animate-bounce">
+              <div className="px-4 py-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm font-semibold">
+                ✨ AI-Powered Blog Creation
+              </div>
+            </div>
 
-      {/* Latest Posts Preview */}
-      {posts && posts.length > 0 && (
-        <div className="mt-20">
-          <h2 className="text-4xl font-bold text-center mb-12">Latest Posts</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <Link href={`/blog/${post.slug}`} key={post.id} className="block">
-                <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle>{post.title}</CardTitle>
-                    <CardDescription>
-                      By {post.username} • {new Date(post.created_at).toLocaleDateString()}
-                    </CardDescription>
-                  </CardHeader>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 transition-all duration-500 transform hover:scale-105">
+              Write Blogs
+              <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                The Easy Way
+              </span>
+            </h1>
 
-                  <div className='rounded-lg p-4'>
-                    {post.featured_image && (
-                                    <img
-                                        src={post.featured_image}
-                                        alt={post.title}
-                                        className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
-                                    />
-                            )}
+            <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-muted-foreground">
+              Transform your ideas into stunning blog posts with AI assistance. Built with Next.js and Supabase for blazing-fast performance.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg group">
+                Explore Blogs
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
+                Watch Demo
+              </Button>
+            </div>
+          </div>
+
+
+
+          {/* blogcard container */}
+
+          {/* Latest Posts Section */}
+          <div className="mt-22">
+            <h2 className="text-4xl font-bold text-center mb-16">Latest Posts</h2>
+
+            {/* Blog Cards Container */}
+            <div className="w-full max-w-6xl mx-auto px-4">
+              <div className="rounded-3xl bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 shadow-xl border border-border backdrop-blur-sm overflow-hidden">
+                <div className="p-8 md:p-12">
+                  {posts && posts.length > 0 ? (
+                    <BlogCard posts={posts} />
+                  ) : (
+                    <div className="text-center space-y-6 py-12">
+                      <Sparkles className="w-16 h-16 mx-auto text-purple-600 dark:text-purple-400 animate-pulse" />
+                      <div>
+                        <p className="text-lg font-semibold text-muted-foreground mb-2">No posts yet</p>
+                        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                          Start creating your first blog post to see it here
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-6 bg-muted/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Powerful Features
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Everything you need to create amazing content
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Sparkles className="w-12 h-12" />,
+                title: "AI-Powered Writing",
+                description: "Let AI help you write, edit, and improve your content with intelligent suggestions and auto-completion."
+              },
+              {
+                icon: <Zap className="w-12 h-12" />,
+                title: "Lightning Fast",
+                description: "Built on Next.js and Supabase for incredible performance and real-time collaboration."
+              },
+              {
+                icon: <Shield className="w-12 h-12" />,
+                title: "Secure & Reliable",
+                description: "Your data is encrypted and backed up automatically with enterprise-grade security."
+              }
+            ].map((feature, idx) => (
+              <Card key={idx} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-card">
+                <CardContent className="p-8">
+                  <div className="mb-4 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform duration-300">
+                    {feature.icon}
                   </div>
-
-                </Card>
-              </Link>
+                  <h3 className="text-2xl font-bold mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
-      )}
+      </section>
 
-      {/* CTA for empty state */}
-      {!posts || posts.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-2xl text-gray-600 mb-8">No posts yet — be the first to write one!</p>
-          <Link
-            href="/login"
-            className="text-blue-600 text-xl hover:underline font-medium"
-          >
-            Log in to start writing →
-          </Link>
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Start writing in three simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              { step: "01", title: "Sign Up", desc: "Create your free account in seconds" },
+              { step: "02", title: "Start Writing", desc: "Use AI assistance to craft your content" },
+              { step: "03", title: "Publish", desc: "Share your blog with the world instantly" }
+            ].map((item, idx) => (
+              <div key={idx} className="text-center group">
+                <div className="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                  {item.step}
+                </div>
+                <h3 className="text-2xl font-bold mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-muted-foreground">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
+      </section>
+
+
+      {/* CTA Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="rounded-3xl p-12 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/50 dark:to-pink-900/50 border">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Ready to Start Writing?
+            </h2>
+            <p className="text-xl mb-8 text-muted-foreground">
+              Join thousands of writers who trust EasyWrite for their blog
+            </p>
+            <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
+              Get Started for Free
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
