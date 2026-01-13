@@ -31,12 +31,10 @@ export default function AuthGreeting() {
   if (loading) return null; // or a skeleton
 
   if (user) {
+    let userName= user.email.split("@")[0].replace(/[0-9]/g, "");
     return (
       <p className="text-xl mb-2">
-        Hello, <span className="font-semibold">{user.email}</span>! 
-        {/* <a href="/write" className="ml-4 text-blue-600 hover:underline font-medium">
-          Write a new post →
-        </a> */}
+        Hello, <span className="font-semibold">{userName}</span>! 
       </p>
     );
   }

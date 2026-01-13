@@ -62,15 +62,9 @@ export default async function BlogPage() {
 
 
 
-            <SearchBlog posts={postsWithData}/>
+            {/* SearchBlog component */}
 
-            {/* <h1 className="text-5xl font-bold text-center mb-10">My Blog</h1> */}
-            {/* <div className="text-center mb-12">
-                <AuthGreeting />
-            </div> */}
-
-
-            {/* Blog card component */}
+            <SearchBlog posts={postsWithData} />
 
 
             <div className="fixed bottom-8 right-8">

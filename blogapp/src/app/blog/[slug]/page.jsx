@@ -4,6 +4,7 @@ import DeletePostButtno from "@/components/DeletePostButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
+import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 
@@ -124,7 +125,7 @@ export default async function PostPage({ params }) {
                 {/* Action Buttons */}
                 {isOwner && (
                     <div className="backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 mb-16 sm:mb-20 shadow-2xl">
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <div className="flex flex-col justify-center sm:flex-row gap-3 sm:gap-4">
                             <Button>
 
                                 <a
@@ -138,7 +139,9 @@ export default async function PostPage({ params }) {
                         </div>
                     </div>
                 )}
+                <Link href="/blog" className="text-center"> <Button className="w-full">Back to Blog page </Button></Link>
             </div>
+
 
             {/* Bottom Spacing */}
             <div className="h-12 sm:h-20"></div>

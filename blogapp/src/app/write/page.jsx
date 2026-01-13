@@ -4,11 +4,11 @@ import { useState } from "react";
 import QuillEditor from "@/components/QuillEditor";
 import { GeneratePostContent } from "@/server/actions/GeneratePostContent";
 import { Button } from "@/components/ui/button";
-import { Pointer } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardTitle } from "@/components/ui/card";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import AuthGreeting from "@/components/AuthGreeting";
 
 export const dynamic = 'force-dynamic';
 
@@ -95,11 +95,18 @@ export default function writePage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-8 mt-30">
+        <div className="max-w-4xl mx-auto p-8 mt-20">
+
+                {/* display user name */}
+             <div className="text-center mb-12">
+                <AuthGreeting />
+            </div>
+
+
             <h1 className="text-3xl font-bold mb-8">Write Your Post</h1>
 
             <Card className="mb-8 p-6">
-                <CardTitle className="text-xl font-semibold mb-4 text-purple-900">Generate with AI</CardTitle>
+                <CardTitle className="text-xl font-semibold mb-4 block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Generate with AI</CardTitle>
                 <div className="flex gap-3">
                     <Input
                         type="text"
@@ -112,7 +119,7 @@ export default function writePage() {
                     <Button
                         onClick={handleGenerate}
                         disabled={generating || !aiPrompt.trim()}
-                        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:opacity-60 transition cursor-pointer"
+                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg cursor-pointer"
                     >
                         {generating ? 'Generating...' : 'Generate blog'}
                     </Button>
