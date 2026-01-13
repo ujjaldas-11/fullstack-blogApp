@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import BlogCard from '@/components/BlogCard';
+import Link from 'next/link';
 
 export default async function EasyWriteLanding() {
   const supabase = await createSupabaseServerClient();
@@ -46,23 +47,26 @@ export default async function EasyWriteLanding() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg group">
-                Explore Blogs
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+
+              <Link href='/blog'>
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg group">
+                  Explore Blogs
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <a href="#">
               <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
                 Watch Demo
               </Button>
+              </a>
             </div>
           </div>
 
 
 
-          {/* blogcard container */}
-
           {/* Latest Posts Section */}
-          <div className="mt-22">
-            <h2 className="text-4xl font-bold text-center mb-16">Latest Posts</h2>
+          <div className="demo mt-22">
+            <h2 className="text-4xl font-bold text-center mb-16 animate-pulse">Latest Posts</h2>
 
             {/* Blog Cards Container */}
             <div className="w-full max-w-6xl mx-auto px-4">
@@ -183,9 +187,11 @@ export default async function EasyWriteLanding() {
             <p className="text-xl mb-8 text-muted-foreground">
               Join thousands of writers who trust EasyWrite for their blog
             </p>
-            <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
-              Get Started for Free
-            </Button>
+            <Link href="/write">
+              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
+                Get Started for Free
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

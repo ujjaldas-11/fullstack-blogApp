@@ -1,14 +1,17 @@
+import React from 'react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import AuthGreeting from '@/components/AuthGreeting';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import BlogCard from '@/components/BlogCard';
+import SearchBlog from '@/components/SearchBlog';
+
 
 
 export const dynamic = 'force-dynamic';
 
 export default async function BlogPage() {
     const supabase = await createSupabaseServerClient();
+
 
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -52,18 +55,23 @@ export default async function BlogPage() {
         username: authorMap[post.author_id] || 'Anonymous',
     }));
 
+
+
     return (
         <div className="max-w-7xl mx-auto p-8 mt-20">
 
+
+
+            <SearchBlog posts={postsWithData}/>
+
             {/* <h1 className="text-5xl font-bold text-center mb-10">My Blog</h1> */}
-            <div className="text-center mb-12">
+            {/* <div className="text-center mb-12">
                 <AuthGreeting />
-            </div>
+            </div> */}
 
 
             {/* Blog card component */}
 
-            <BlogCard posts={postsWithData} />
 
             <div className="fixed bottom-8 right-8">
                 <Button size="lg" className="rounded-full shadow-2xl">
