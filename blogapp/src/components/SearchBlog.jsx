@@ -12,19 +12,21 @@ export default function SearchBlog({ posts }) {
 
     const filterBlogs = useMemo(() => {
 
+        let result = posts;
+
         if(activeCategory !== "All")  {
-            posts.filter(post => 
+            result = result.filter(post => 
                 post.category?.toLowerCase() === activeCategory.toLowerCase()
             )
         }
 
         if (!searchTerm.trim()) {
-            return posts;
+            return result;
         }
 
         const search = searchTerm.toLowerCase();
 
-        return posts
+        return result
             .map(post => {
                 const title = post.title.toLowerCase();
                 let matchScore = 0;
@@ -48,6 +50,7 @@ export default function SearchBlog({ posts }) {
             })
             .filter(Boolean)
             .sort((a, b) => b.matchScore - a.matchScore);
+
     }, [searchTerm, activeCategory, posts]);
 
 
@@ -58,7 +61,7 @@ export default function SearchBlog({ posts }) {
             {/* search blog */}
             <div className='flex justify-center items-center p-2'>
                 <Input
-                    className="w-[50vw] rounded-full"
+                    className="w-[50vw] rounded-full px-4 py-6"
                     type="text"
                     placeholder="search any blog..."
                     value={searchTerm}
@@ -91,7 +94,7 @@ export default function SearchBlog({ posts }) {
                     (
                         <>
                             {/* blog count */}
-                            <h2 className="text-2xl text-center font-bold">Blogs found: {filterBlogs.length}</h2>
+                            {/* <h2 className="text-sm text-center font-bold">Blogs found: {filterBlogs.length}</h2> */}
 
 
                             {/* // BlogCard component */}

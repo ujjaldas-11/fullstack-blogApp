@@ -4,9 +4,9 @@ import React from "react";
 export default function BlogCategorieList({ activeCategory, setActiveCategory}) {
     const categories = [
         { name: 'All', icon: '🌐', gradient: 'from-purple-500 to-pink-500' },
-        { name: 'Politics', icon: '🏛️', gradient: 'from-blue-500 to-cyan-500' },
         { name: 'Technology', icon: '💻', gradient: 'from-green-500 to-emerald-500' },
         { name: 'AI', icon: '🤖', gradient: 'from-orange-500 to-red-500' },
+        { name: 'Politics', icon: '🏛️', gradient: 'from-blue-500 to-cyan-500' },
         { name: 'Science', icon: '🔬', gradient: 'from-indigo-500 to-purple-500' },
         { name: 'Travel', icon: '✈️', gradient: 'from-teal-500 to-blue-500' }
     ];
@@ -19,7 +19,7 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory}) 
     // }));
 
     return (
-        <>
+        <div className="flex justify-center items-center gap-4 m-2">
             {
                 categories.map((category) => {
                     const isActive = activeCategory === category.name;  
@@ -29,7 +29,7 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory}) 
                         <button
                             key={category.name}
                             onClick={() => setActiveCategory(category.name)}
-                            className="group relative flex-shrink-0 snap-center"
+                            className="group relative flex-shrink-0 snap-center cursor-pointer"
                         >
                             {isActive && (
                                 <div
@@ -38,7 +38,7 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory}) 
                             )}
 
                             <div className={`
-                    relative flex items-center gap-3 px-6 py-3 rounded-2xl
+                    relative flex items-center gap-3 px-6 py-1 rounded-2xl
                     transition-all duration-300 ease-out
                     ${isActive
                                     ? `bg-gradient-to-r ${category.gradient} text-white shadow-xl scale-105`
@@ -74,6 +74,6 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory}) 
                     );
                 })
             }
-        </>
+        </div>
     )
 }
