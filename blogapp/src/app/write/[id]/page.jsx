@@ -10,6 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 
 export const dynamic = 'force-dynamic';
@@ -18,6 +27,7 @@ export default function EditPost({ params }) {
     const { id } = React.use(params);
 
     const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('');
     const [content, setContent] = useState('');
     const [slug, setSlug] = useState('');
     const [loading, setLoading] = useState(true);
@@ -41,6 +51,7 @@ export default function EditPost({ params }) {
             }
 
             setTitle(post.title);
+            setCategory(post.category);
             setContent(post.content || '');
             setSlug(post.slug);
             setFeaturedImage(post.featured_image || '')
@@ -90,6 +101,7 @@ export default function EditPost({ params }) {
         const formData = new FormData();
         formData.append('id', id);
         formData.append('title', title);
+        formData.append('category', category);
         formData.append('content', content);
         formData.append('slug', slug);
         formData.append('featured_image', featuredImage);
@@ -143,9 +155,28 @@ export default function EditPost({ params }) {
                         className="w-full p-4"
                     />
                 </div>
-                
 
-                 <div>
+                {/* category list */}
+                <div className="grid gap-2">
+                    <Label className='font-semibold text-md'>Category</Label>
+                    <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="Technology">Technology</SelectItem>
+                                <SelectItem value="Science">Science</SelectItem>
+                                <SelectItem value="AI">AI</SelectItem>
+                                <SelectItem value="Travel">Travel</SelectItem>
+                                <SelectItem value="Politics">Politics</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+
+                <div>
                     <label className="block text-lg font-medium mb-3">Cover Image (Optional)</label>
                     <div className="flex items-center gap-4">
                         <input
@@ -156,14 +187,6 @@ export default function EditPost({ params }) {
                             className="hidden"
                             id="cover-image-input"
                         />
-                        
-                        {/* <label
-                            htmlFor="cover-image-input"
-                            className="cursor-pointer inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                            style={uploading ? { opacity: 0.5, pointerEvents: 'none' } : {}}
-                        >
-                            {uploading ? 'Uploading...' : featuredImage ? 'Change Image' : 'Choose Image'}
-                        </label> */}
 
                         {featuredImage && (
                             <div className="relative">

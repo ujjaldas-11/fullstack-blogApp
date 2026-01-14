@@ -18,6 +18,7 @@ export async function createPost(formData) {
     } 
 
     const title = formData.get('title');
+    const category = formData.get('category');
     const content = formData.get('content');
     const featured_image = formData.get('featured_image') || null; 
 
@@ -30,7 +31,7 @@ export async function createPost(formData) {
 
     const {data, error} = await supabase
         .from('posts')
-        .insert({title, content, slug, author_id: user.id, featured_image,})
+        .insert({title, category, content, slug, author_id: user.id, featured_image,})
         .select()
         .single();
     
@@ -52,6 +53,7 @@ export async function updatePost(formData) {
 
     const slug = formData.get('slug');
     const title = formData.get('title');
+    const category = formData.get('category');
     const content = formData.get('content');
 
     const newSlug = title
@@ -63,7 +65,7 @@ export async function updatePost(formData) {
 
     const {data, error} = await supabase
     .from('posts')
-    .update({title, content, slug: newSlug})
+    .update({title, category, content, slug: newSlug})
     .eq('slug', slug);
 
     if(error) {

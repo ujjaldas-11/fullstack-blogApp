@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 
 export default function BlogCard({posts}) {
@@ -15,12 +15,13 @@ export default function BlogCard({posts}) {
                                 <img
                                     src={post.featured_image}
                                     alt={post.title}
-                                    className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
+                                    className="w-full h-[35vh] object-cover rounded-xl shadow-lg"
                                 />
                             )}
                         </div>
                         <CardHeader>
                             <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
+                            <CardAction>{post.category}</CardAction>
                             <CardDescription className='text-md'>
                                 By {post.username} • {new Date(post.created_at).toLocaleDateString('en-US', {
                                     month: 'short',

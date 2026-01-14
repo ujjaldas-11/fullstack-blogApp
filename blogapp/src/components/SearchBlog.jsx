@@ -3,11 +3,21 @@
 import { useState, useMemo } from "react";
 import { Input } from "./ui/input";
 import BlogCard from "./BlogCard";
+import BlogCategorieList from "./BlogCategorieList";
 
-export default function ({ posts }) {
+export default function SearchBlog({ posts }) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeCategory, setActiveCategory] = useState('All');
+
 
     const filterBlogs = useMemo(() => {
+
+        if(activeCategory !== "All")  {
+            posts.filter(post => 
+                post.category?.toLowerCase() === activeCategory.toLowerCase()
+            )
+        }
+
         if (!searchTerm.trim()) {
             return posts;
         }
@@ -38,7 +48,7 @@ export default function ({ posts }) {
             })
             .filter(Boolean)
             .sort((a, b) => b.matchScore - a.matchScore);
-    }, [searchTerm, posts]);
+    }, [searchTerm, activeCategory, posts]);
 
 
 
@@ -56,6 +66,19 @@ export default function ({ posts }) {
                 />
             </div>
 
+            {/* Blog Category list component */}
+            <BlogCategorieList
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+            />
+
+
+
+             {/* Results Info */}
+            <div className="text-center text-sm text-slate-600 mb-6">
+                Showing {filterBlogs.length} {filterBlogs.length === 1 ? 'post' : 'posts'}
+                {activeCategory !== 'All' && ` in ${activeCategory}`}
+            </div>
 
             {/*  blog List */}
 
@@ -67,21 +90,11 @@ export default function ({ posts }) {
                     ) :
                     (
                         <>
-                        {/* blog count */}
-                        <h2 className="text-2xl text-center font-bold">Blogs found: {filterBlogs.length}</h2>
-
-                            {/* // blog catagories */}
-                            <div>
-                                <ul className='flex justify-center items-center gap-4 m-5'>
-                                    <li>All</li>
-                                    <li>Politics</li>
-                                    <li>Technology</li>
-                                    <li>Ai</li>
-                                </ul>
-                            </div>
+                            {/* blog count */}
+                            <h2 className="text-2xl text-center font-bold">Blogs found: {filterBlogs.length}</h2>
 
 
-                                {/* // BlogCard component */}
+                            {/* // BlogCard component */}
                             <BlogCard posts={filterBlogs} />
                         </>
 

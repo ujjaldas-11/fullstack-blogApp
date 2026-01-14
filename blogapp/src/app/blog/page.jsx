@@ -17,7 +17,7 @@ export default async function BlogPage() {
 
     const { data: posts, error } = await supabase
         .from('posts')
-        .select('id, title, content, slug, created_at, author_id, featured_image')
+        .select('id, title, category, content, slug, created_at, author_id, featured_image')
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -65,7 +65,6 @@ export default async function BlogPage() {
             {/* SearchBlog component */}
 
             <SearchBlog posts={postsWithData} />
-
 
             <div className="fixed bottom-8 right-8">
                 <Button size="lg" className="rounded-full shadow-2xl">

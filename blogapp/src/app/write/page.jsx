@@ -1,4 +1,5 @@
 'use client';
+import * as React from 'react'
 import { createPost } from "@/server/actions/posts"
 import { useState } from "react";
 import QuillEditor from "@/components/QuillEditor";
@@ -9,11 +10,21 @@ import { Input } from "@/components/ui/input";
 import { Card, CardTitle } from "@/components/ui/card";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import AuthGreeting from "@/components/AuthGreeting";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 export const dynamic = 'force-dynamic';
 
 export default function writePage() {
     const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('');
     const [content, setContent] = useState('');
     const [aiPrompt, setAiPromt] = useState('');
     const [generating, setGenerating] = useState(false);
@@ -97,8 +108,8 @@ export default function writePage() {
     return (
         <div className="max-w-4xl mx-auto p-8 mt-20">
 
-                {/* display user name */}
-             <div className="text-center mb-12">
+            {/* display user name */}
+            <div className="text-center mb-12">
                 <AuthGreeting />
             </div>
 
@@ -142,6 +153,26 @@ export default function writePage() {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter your post title.."
                     />
+                </div>
+
+                {/* category */}
+
+                <div className="grid gap-2">
+                    <Label className='font-semibold text-md'>Category</Label>
+                    <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="Technology">Technology</SelectItem>
+                                <SelectItem value="Science">Science</SelectItem>
+                                <SelectItem value="AI">AI</SelectItem>
+                                <SelectItem value="Travel">Travel</SelectItem>
+                                <SelectItem value="Politics">Politics</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 {/* Upload featured image */}

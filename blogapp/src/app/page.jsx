@@ -46,20 +46,13 @@ export default async function EasyWriteLanding() {
               Transform your ideas into stunning blog posts with AI assistance. Built with Next.js and Supabase for blazing-fast performance.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-
-              <Link href='/blog'>
-                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg group">
-                  Explore Blogs
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <a href="#">
-              <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                Watch Demo
+            <Link href='/blog'>
+              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg group">
+                Explore Blogs
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              </a>
-            </div>
+            </Link>
+
           </div>
 
 
