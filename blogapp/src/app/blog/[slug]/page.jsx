@@ -34,12 +34,12 @@ export default async function PostPage({ params }) {
     if (post.author_id) {
         const { data: profile } = await supabase
             .from('profiles')
-            .select('username')
+            .select('full_name')
             .eq('user_id', post.author_id)
             .single();
 
-        if (profile?.username) {
-            username = profile.username;
+        if (profile?.full_name) {
+            username = profile.full_name;
 
         }
     }

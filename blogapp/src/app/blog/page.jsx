@@ -41,18 +41,18 @@ export default async function BlogPage() {
     if (authorIds.length > 0) {
         const { data: profiles } = await supabase
             .from('profiles')
-            .select('user_id, username')
+            .select('user_id, full_name`')
             .in('user_id', authorIds);
 
         if (profiles) {
-            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.username || 'Anonymous']));
+            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.full_name || 'Anonymous']));
         }
     }
 
     // Add username to each post
     const postsWithData = posts.map(post => ({
         ...post,
-        username: authorMap[post.author_id] || 'Anonymous',
+        full_name: authorMap[post.author_id] || 'Anonymous',
     }));
 
 

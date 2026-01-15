@@ -61,7 +61,7 @@ export default function SearchBlog({ posts }) {
             {/* search blog */}
             <div className='flex justify-center items-center p-2'>
                 <Input
-                    className="w-[50vw] rounded-full px-4 py-6"
+                    className="w-full rounded-full px-4 py-6"
                     type="text"
                     placeholder="search any blog..."
                     value={searchTerm}

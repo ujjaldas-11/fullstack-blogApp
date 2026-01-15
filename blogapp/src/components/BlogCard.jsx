@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 
 export default function BlogCard({ posts }) {
@@ -10,21 +10,24 @@ export default function BlogCard({ posts }) {
                 <Link href={`/blog/${post.slug}`} key={post.id}>
                     <Card className="hover:shadow-xl transition-shadow overflow-hidden h-full">
 
-                        <div className='rounded-lg p-4'>
+                        {/* blog image  */}
+                        <div className='rounded-lg p-2 sm:p-4'>
                             {post.featured_image && (
-                                <img
-                                    src={post.featured_image}
-                                    alt={post.title}
-                                    className="w-full h-[30vh] object-cover rounded-xl shadow-lg"
-                                />
+                                <div className="relative w-full aspect-video">
+                                    <img
+                                        src={post.featured_image}
+                                        alt={post.title}
+                                        className="w-full h-full object-cover rounded-xl shadow-lg"
+                                    />
+                                </div>
                             )}
                         </div>
                         <CardHeader className="flex flex-col">
                             <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
                             <CardDescription className='text-md'>
-                                <CardAction>{post.category}</CardAction>
+                                {/* <CardAction>{post.category}</CardAction> */}
                                 <div>
-                                    By {post.username} • {new Date(post.created_at).toLocaleDateString('en-US', {
+                                    By {post.full_name} • {new Date(post.created_at).toLocaleDateString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
                                         year: 'numeric'

@@ -32,6 +32,7 @@ export default function AuthGreeting() {
 
   if (user) {
     let userName= user.email.split("@")[0].replace(/[0-9]/g, "");
+    // let userName = user.username;
     return (
       <p className="text-xl mb-2">
         Hello, <span className="font-semibold">{userName}</span>! 

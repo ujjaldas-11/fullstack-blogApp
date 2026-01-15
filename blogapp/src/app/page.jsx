@@ -72,9 +72,9 @@ export default async function EasyWriteLanding() {
                       <Sparkles className="w-16 h-16 mx-auto text-purple-600 dark:text-purple-400 animate-pulse" />
                       <div>
                         <p className="text-lg font-semibold text-muted-foreground mb-2">No posts yet</p>
-                        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                        <a href="/write" className="text-sm text-muted-foreground max-w-md mx-auto">
                           Start creating your first blog post to see it here
-                        </p>
+                        </a>
                       </div>
                     </div>
                   )}
