@@ -1,53 +1,99 @@
+'use client'
+import { use } from "react";
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import DeletePostButtno from "@/components/DeletePostButton";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+// import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
-import {Card} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import { Heart, Eye } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export const dynamic = 'force-dynamic';
 
 
 
-export default async function PostPage({ params }) {
+export default function PostPage({ params }) {
+    const { slug } = use(params);
 
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const supabase = createSupabaseBrowserClient();
 
-    const { slug } = await params;
-
-
-    // Fetch the post
-    const { data: post, error } = await supabase
-        .from('posts')
-        .select('id, title, content, slug, created_at, author_id, featured_image')
-        .eq('slug', slug)
-        .single();
-
-    if (error || !post) {
-        notFound(); // 404 page
-    }
+    const [post, setPost] = useState(null);
+    const [user, setUser] = useState(null);
+    const [username, setUsername] = useState('Anonymous');
+    const [likeCount, setLikeCount] = useState(0);
+    const [loading, setLoading] = useState(true)
 
 
-    let username = 'Anonymous';
-    if (post.author_id) {
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('full_name')
-            .eq('user_id', post.author_id)
-            .single();
+    useEffect(() => {
+        const fetchPostUser = async () => {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user);
 
-        if (profile?.full_name) {
-            username = profile.full_name;
+                // Fetch the post
+                const { data: post, error } = await supabase
+                    .from('posts')
+                    .select('id, title, content, slug, created_at, author_id, featured_image, views, updated_at')
+                    .eq('slug', slug)
+                    .single();
 
+                if (error || !post) {
+                    notFound();
+                }
+
+                setPost(post);
+
+                // Increment views per load 
+                await supabase
+                    .from('posts')
+                    .update({ views: post.views + 1 })
+                    .eq('id', post.id);
+
+                // Fetch username
+                if (post.author_id) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('full_name')
+                        .eq('user_id', post.author_id)
+                        .single();
+
+                    if (profile?.full_name) {
+                        setUsername(profile.full_name);
+                    }
+                }
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching post:', error);
+                setLoading(false);
+            }
         }
+
+        fetchPostUser();
+    }, [slug]);
+
+
+    
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p className="text-lg">Loading...</p>
+            </div>
+        );
     }
 
+    if (!post) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p className="text-lg">Post not found</p>
+            </div>
+        );
+    }
+    
     const isOwner = user && user.id === post.author_id;
-
-
-
     return (
         <div className="min-h-screen">
             {/*  Image section */}
@@ -59,7 +105,7 @@ export default async function PostPage({ params }) {
                             alt={post.title}
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background"></div>
                     </div>
                 )}
             </div>
@@ -76,7 +122,8 @@ export default async function PostPage({ params }) {
                             {post.title}
                         </h1>
 
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 pt-6 border-t border-slate-800">
+                        {/* profile meta data */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 gap-4 sm:gap-6 pt-6 border-t border-slate-800">
                             <div className="flex items-center gap-3">
                                 <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-semibold text-slate-300 text-lg">
                                     {username.charAt(0)}
@@ -85,17 +132,43 @@ export default async function PostPage({ params }) {
                                     <p className="font-semibold text-base sm:text-lg">{username}</p>
                                     <p className="text-sm ">Author</p>
                                 </div>
+
+                                <div className=" sm:block w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+
+                                <time className="text-slate-400 text-sm sm:text-base">
+                                    {new Date(post.created_at).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}
+                                </time>
                             </div>
 
-                            <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+                            {/* views, like, comment, save */}
 
-                            <time className="text-slate-400 text-sm sm:text-base">
-                                {new Date(post.created_at).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                })}
-                            </time>
+                            <div className="flex flex-row gap-2">
+
+                                <Button className="flex gap-2">
+                                    <Eye />
+                                    <p className="font-semibold text-base sm:text-lg">{post.views + 1}</p>
+                                </Button>
+
+                                <Button
+                                    onclick={(e) => {
+                                        setLikeCount(likeCount + 1);
+                                    }}
+                                >
+                                    <Heart />
+                                    <span>{likeCount}</span>
+                                </Button>
+
+                                <Button>
+                                    comment
+                                </Button>
+
+                                <Button>BookMark</Button>
+                            </div>
+
                         </div>
                     </div>
                 </div>
