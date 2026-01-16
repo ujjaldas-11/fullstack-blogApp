@@ -24,7 +24,7 @@ export default function PostPage({ params }) {
     const [user, setUser] = useState(null);
     const [username, setUsername] = useState('Anonymous');
     const [likeCount, setLikeCount] = useState(0);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
@@ -33,15 +33,22 @@ export default function PostPage({ params }) {
                 const { data: { user } } = await supabase.auth.getUser();
                 setUser(user);
 
+                console.log('Fetching post with slug:', slug);
+
                 // Fetch the post
                 const { data: post, error } = await supabase
                     .from('posts')
-                    .select('id, title, content, slug, created_at, author_id, featured_image, views, updated_at')
+                    .select('id, title, content, slug, created_at, author_id, featured_image, views')
                     .eq('slug', slug)
                     .single();
 
+                console.log('Post data:', post);
+                console.log('Post error:', error);
+
                 if (error || !post) {
-                    notFound();
+                    console.error('Supabase error:', error);
+                    setLoading(false);
+                    return;
                 }
 
                 setPost(post);
@@ -49,7 +56,7 @@ export default function PostPage({ params }) {
                 // Increment views per load 
                 await supabase
                     .from('posts')
-                    .update({ views: post.views + 1 })
+                    .update({ views: (post.views || 0) + 1 })
                     .eq('id', post.id);
 
                 // Fetch username
@@ -150,11 +157,11 @@ export default function PostPage({ params }) {
 
                                 <Button className="flex gap-2">
                                     <Eye />
-                                    <p className="font-semibold text-base sm:text-lg">{post.views + 1}</p>
+                                    <p className="font-semibold text-base sm:text-lg">{(post.views || 0) + 1}</p>
                                 </Button>
 
                                 <Button
-                                    onclick={(e) => {
+                                    onClick={(e) => {
                                         setLikeCount(likeCount + 1);
                                     }}
                                 >
