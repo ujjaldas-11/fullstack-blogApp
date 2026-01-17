@@ -164,12 +164,13 @@ export default function PostPage({ params }) {
 
                             <div className="flex flex-row gap-2">
 
-                                <Button className="flex gap-2">
+                                <Button className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200">
                                     <Eye />
                                     <p className="font-semibold text-base sm:text-lg">{(post.views || 0) + 1}</p>
                                 </Button>
 
                                 <Button
+                                    className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer"
                                     onClick={(e) => {
                                         setLikeCount(likeCount + 1);
                                     }}
@@ -178,11 +179,11 @@ export default function PostPage({ params }) {
                                     <span>{likeCount}</span>
                                 </Button>
 
-                                <Button>
+                                <Button className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">
                                     <MessageCircle />
                                 </Button>
 
-                                <Button>BookMark</Button>
+                                <Button className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">BookMark</Button>
                             </div>
 
                         </div>

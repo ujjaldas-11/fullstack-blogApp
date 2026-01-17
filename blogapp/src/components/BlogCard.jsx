@@ -36,12 +36,7 @@ export default function BlogCard({ posts }) {
                                 {post.title}
                             </h3>
 
-                            {/* Excerpt (if available) */}
-                            {post.content && (
-                                <p className="text-sm text-slate-600 line-clamp-2">
-                                    {post.content.replace(/<[^>]*>/g, '').substring(0, 120)}...
-                                </p>
-                            )}
+                           
                         </CardHeader>
 
                         <CardFooter className="flex flex-col gap-4 pt-0">
@@ -54,7 +49,7 @@ export default function BlogCard({ posts }) {
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-slate-900 truncate">
+                                    <p className="text-md font-medium truncate">
                                         {post.username || 'Anonymous'}
                                     </p>
                                     <div className="flex items-center gap-1 text-xs text-slate-500">

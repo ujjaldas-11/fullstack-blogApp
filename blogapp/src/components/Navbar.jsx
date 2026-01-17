@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { ModeToggle } from './themeButton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +40,7 @@ export default async function Navbar() {
                     {user ? (
                         <div className='flex justify-center items-right gap-6'>
                             <ModeToggle />
-                            <Link
+                            {/* <Link
                                 href="/write"
                                 className='cursor-pointer'
                             >
@@ -47,15 +48,22 @@ export default async function Navbar() {
                                 >
                                     write
                                 </Button>
+                            </Link> */}
+                            <Link href="/profile">
+                                <Avatar className="w-10 h-10 border-2 border-slate-100">
+                                    <AvatarImage src="" />
+                                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm">
+                                        {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                                    </AvatarFallback>
+                                </Avatar>
                             </Link>
 
-
-                            <form action={handleLogout}>
+                            {/* <form action={handleLogout}>
                                 <Button
                                     className='font-bold'
                                     type='submit'
                                 >Log Out</Button>
-                            </form>
+                            </form> */}
 
                         </div>
                     ) : (
