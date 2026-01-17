@@ -1,3 +1,4 @@
+// 'use client'
 import React from 'react';
 import { Sparkles, Zap, Shield, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,7 @@ export default async function EasyWriteLanding() {
   // Fetch latest 3 posts for preview
   const { data: posts } = await supabase
     .from('posts')
-    .select('id, title, slug, created_at, content, featured_image')
+    .select('id, title, slug, created_at, content, featured_image, views')
     .order('created_at', { ascending: false })
     .limit(3);
 

@@ -15,9 +15,11 @@ export default async function BlogPage() {
 
     const { data: { user } } = await supabase.auth.getUser();
 
+
+
     const { data: posts, error } = await supabase
         .from('posts')
-        .select('id, title, category, content, slug, created_at, author_id, featured_image')
+        .select('id, title, category, content, slug, created_at, author_id, featured_image, views')
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -36,24 +38,29 @@ export default async function BlogPage() {
 
     // Fetch usernames
     const authorIds = [...new Set(posts.map(p => p.author_id).filter(Boolean))];
+    console.log('author id: ',authorIds)
     let authorMap = {};
 
     if (authorIds.length > 0) {
         const { data: profiles } = await supabase
             .from('profiles')
-            .select('user_id, full_name`')
+            .select('user_id, username')
             .in('user_id', authorIds);
 
+        console.log('profilesdata: ', profiles);
         if (profiles) {
-            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.full_name || 'Anonymous']));
+            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.username || 'Anonymous']));
         }
     }
 
     // Add username to each post
     const postsWithData = posts.map(post => ({
         ...post,
-        full_name: authorMap[post.author_id] || 'Anonymous',
+        username: authorMap[post.author_id] || 'Anonymous',
+
     }));
+
+    // console.log(postsWithData);
 
 
 

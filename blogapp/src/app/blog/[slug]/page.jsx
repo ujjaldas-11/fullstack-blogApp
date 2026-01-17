@@ -1,13 +1,13 @@
 'use client'
 import { use } from "react";
 import { supabase } from "@/lib/supabase";
-import { notFound } from "next/navigation";
 import DeletePostButtno from "@/components/DeletePostButton";
-// import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Heart, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { Heart, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -83,11 +83,16 @@ export default function PostPage({ params }) {
     }, [slug]);
 
 
-    
+
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <p className="text-lg">Loading...</p>
+            <div className="min-h-screen flex flex-col items-center justify-center gap-2">
+                <div className="flex gap-2 space-y-2">
+                    <Skeleton className="h-[50px] w-[50px] rounded-full" />
+                    <Skeleton className="h-10 w-[250px]" />
+                </div>
+                <Skeleton className="h-[300px] w-[350px] rounded-xl" />
+                {/* <Skeleton className="h-[300px] w-[350px] rounded-xl" /> */}
             </div>
         );
     }
@@ -99,7 +104,7 @@ export default function PostPage({ params }) {
             </div>
         );
     }
-    
+
     const isOwner = user && user.id === post.author_id;
     return (
         <div className="min-h-screen">
@@ -131,10 +136,14 @@ export default function PostPage({ params }) {
 
                         {/* profile meta data */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 gap-4 sm:gap-6 pt-6 border-t border-slate-800">
+                            {/* avatar image  */}
                             <div className="flex items-center gap-3">
-                                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-semibold text-slate-300 text-lg">
-                                    {username.charAt(0)}
-                                </div>
+                                <Avatar className="w-16 h-16">
+                                    <AvatarImage src="" />
+                                    <AvatarFallback className="text-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                                        {username ? username.charAt(0).toUpperCase() : 'U'}
+                                    </AvatarFallback>
+                                </Avatar>
                                 <div>
                                     <p className="font-semibold text-base sm:text-lg">{username}</p>
                                     <p className="text-sm ">Author</p>
@@ -170,7 +179,7 @@ export default function PostPage({ params }) {
                                 </Button>
 
                                 <Button>
-                                    comment
+                                    <MessageCircle />
                                 </Button>
 
                                 <Button>BookMark</Button>
