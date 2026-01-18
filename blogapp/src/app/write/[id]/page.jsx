@@ -125,7 +125,7 @@ export default function EditPost({ params }) {
 
     if (loading) {
         return (
-            <div className="flex flex-col space-y-3 justify-center items-center mt-30">
+            <div className="min-h-screen flex flex-col space-y-3 justify-center items-center mt-30">
                 <div className="space-y-2">
                     <Skeleton className="h-10 w-[250px]" />
                     <Skeleton className="h-10 w-[250px]" />

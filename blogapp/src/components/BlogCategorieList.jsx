@@ -83,7 +83,7 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory })
                     transition-all duration-300 ease-out 
                     ${isActive
                       ? `bg-gradient-to-r ${category.gradient} text-white shadow-xl scale-105`
-                      : 'bg-white text-slate-700 hover:shadow-lg hover:scale-105 hover:bg-slate-50'
+                      : 'bg-transparent hover:shadow-lg hover:scale-105 border'
                     }
                   `}>
                     <span className="text-2xl transform group-hover:scale-110 transition-transform duration-300">

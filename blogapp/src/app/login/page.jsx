@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
+import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const supabase = createSupabaseBrowserClient();
 
   // handle authentication 
@@ -106,6 +106,15 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen w-auto flex flex-col items-center justify-center">        
+          <Skeleton className="h-[250px] w-[250px] rounded-xl" />
+      </div>
+    );
+  }
 
 
   return (

@@ -4,6 +4,7 @@ import React from 'react';
 import { Settings, LogOut, Mail, Calendar, FileText, Plus, Edit3, Trash2, ThermometerSnowflake } from 'lucide-react';
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import BlogCard from "@/components/BlogCard";
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,7 @@ export default function profilePage() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const supabase = createSupabaseBrowserClient();
 
@@ -73,11 +74,11 @@ export default function profilePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-2">
-        <div className="flex gap-2 space-y-2">
+        {/* <div className="flex gap-2 space-y-2">
           <Skeleton className="h-[50px] w-[50px] rounded-full" />
-          <Skeleton className="h-10 w-[250px]" />
-        </div>
-        <div>
+        </div> */}
+        <Skeleton className="h-[300px] w-[90vw] rounded-lg" />
+        <div className="flex justify-center items-center gap-2">
           <Skeleton className="h-[250px] w-[250px] rounded-xl" />
           <Skeleton className="h-[250px] w-[250px] rounded-xl" />
           <Skeleton className="h-[250px] w-[250px] rounded-xl" />
@@ -114,7 +115,7 @@ export default function profilePage() {
                   </div>
                   <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-full border-4 border-white"></div>
                 </div>
-            
+
                 {/* Profile Info */}
                 <CardHeader className="flex flex-col text-center w-full">
                   <CardAction className="text-4xl text-center font-bold bg-clip-text mb-2">
@@ -139,13 +140,15 @@ export default function profilePage() {
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button
+                      {/* <Button
                         type="button"
                         variant="ghost"
-                        className="px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-700 rounded-lg sm:rounded-xl font-semibold hover:bg-slate-200 transition-all"
-                      >
-                        <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+                        className="px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-700 rounded-lg sm:rounded-xl font-semibold hover:bg-slate-200 transition-all" */}
+                      {/* > */}
+                      <Button className="h-[3rem] rounded-lg text-center p-4 px-2 cursor-pointer">
+                        <LogOut className="w-5 h-5" />
                       </Button>
+                      {/* </Button> */}
                     </AlertDialogTrigger>
                     <AlertDialogContent className="max-w-[90vw] sm:max-w-md">
                       <AlertDialogHeader>
@@ -224,18 +227,18 @@ export default function profilePage() {
           </div>
 
           {userPosts.length === 0 ? (
-            <div className="bg-white rounded-3xl p-16 text-center shadow-lg border border-slate-100">
+            <Card className=" rounded-3xl p-16 text-center shadow-lg border">
               <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <FileText className="w-12 h-12 text-purple-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">No posts yet</h3>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">
+              <h3 className="text-2xl font-bold mb-3">No posts yet</h3>
+              <p className="mb-8 max-w-md mx-auto">
                 Start sharing your thoughts with the world. Create your first blog post today!
               </p>
               <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all">
                 Create Your First Post
               </button>
-            </div>
+            </Card>
           ) : (
             <>
               <BlogCard posts={userPosts} />

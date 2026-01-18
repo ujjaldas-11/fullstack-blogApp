@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardTitle, CardHeader, CardDescription, CardContent } from '@/components/ui/card'
 import { useEffect, useState } from 'react'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
@@ -12,7 +13,7 @@ export default function profileSettingPage() {
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(false)
 
   const supabase = createSupabaseBrowserClient();
@@ -44,27 +45,45 @@ export default function profileSettingPage() {
 
 
   const handleUpdate = async (e) => {
-    e.preventdefault();
+    e.preventDefault();
     setLoading(true);
 
-    const { data: error } = await supabase
-      .from('profiles')
-      .update({ username, full_name: fullName })
-      .eq('user_id', user.id);
+    try {
 
-    if (error) {
-      alert('profile updating error: ' + error.message)
-    } else {
-      alert('profile updates succesfully');
+      // get user
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        alert('user not found');
+        setLoading(false)
+        return;
+      }
+
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ username, full_name: fullName })
+        .eq('user_id', user.id);
+
+      if (error) {
+        alert('profile updating error: ' + error.message)
+      } else {
+        alert('profile updates succesfully');
+      }
+
+    } catch (error) {
+      console.error('Unexpected error: ', error);
+      alert('An error accured while updating the profile');
+    } finally {
+      setLoading(false);
     }
 
-    setLoading(false);
   }
 
   if (initialLoading) {
     return (
-      <div className="max-w-2xl mx-auto p-8 mt-20">
-          <Skeleton className="h-[400px] w-[250px] rounded-xl" />
+      <div className="max-w-2xl mx-auto p-8 mt-20 flex justify-center">
+        <Skeleton className="h-[400px] w-full max-w-[600px] rounded-xl" />
       </div>
     );
   }
