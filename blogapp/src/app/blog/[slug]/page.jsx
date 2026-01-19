@@ -23,8 +23,9 @@ export default function PostPage({ params }) {
     const [post, setPost] = useState(null);
     const [user, setUser] = useState(null);
     const [username, setUsername] = useState('Anonymous');
-    const [likeCount, setLikeCount] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [likes, setLikes] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
 
 
     useEffect(() => {
@@ -59,6 +60,27 @@ export default function PostPage({ params }) {
                     .update({ views: (post.views || 0) + 1 })
                     .eq('id', post.id);
 
+                // fetch likes count from likes table
+
+                const { count } = await supabase
+                    .from('likes')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('post_id', post.id);
+
+                setLikes(count || 0);
+
+                //check if current user liked this post
+                if (user) {
+                    const { data: likeData } = await supabase
+                        .from('likes')
+                        .select('*')
+                        .eq('post_id', post.id)
+                        .eq('user_id', user.id)
+                        .single();
+
+                    setIsLiked(!!likeData);
+                }
+
                 // Fetch username
                 if (post.author_id) {
                     const { data: profile } = await supabase
@@ -80,7 +102,56 @@ export default function PostPage({ params }) {
         }
 
         fetchPostUser();
-    }, [slug]);
+    }, [slug, supabase]);
+
+
+
+    // handle like 
+    const handleLike = async () => {
+        if (!user) {
+            alert('Please login to like posts');
+            return;
+        }
+
+        if (!post) return;
+
+        try {
+            //unlike
+            if (isLiked) {
+                const { error } = await supabase
+                    .from('likes')
+                    .delete()
+                    .eq('post_id', post.id)
+                    .eq('user_id', user.id)
+
+                if (error) {
+                    console.error('like error', error)
+                    return;
+                }
+                //decreament like
+
+                setLikes(likes - 1)
+                setIsLiked(false);
+
+            } else {
+                // like
+                const { error } = await supabase
+                    .from('likes')
+                    .insert({ post_id: post.id, 'user_id': user.id })
+
+                if (error) {
+                    console.log('like error', error);
+                    alert('Like failed ', error.message);
+                }
+
+                setLikes(likes + 1);
+                setIsLiked(true);
+            }
+
+        } catch (error) {
+            console.error('Error handling like ', error);
+        }
+    };
 
 
 
@@ -170,13 +241,19 @@ export default function PostPage({ params }) {
                                 </Button>
 
                                 <Button
-                                    className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer"
-                                    onClick={(e) => {
-                                        setLikeCount(likeCount + 1);
-                                    }}
+                                    className="flex gap-2 bg-transparent hover:bg-transparent cursor-pointer"
+                                    onClick={handleLike}
+                                // disabled={isLiked}
                                 >
-                                    <Heart />
-                                    <span>{likeCount}</span>
+                                    <Heart
+                                        className={`
+                                            transition-all duration-300 transform cursor-pointer
+                                            ${isLiked
+                                                ? "text-red-500 fill-red-500 scale-110 animate-heart"
+                                                : "text-gray-400 fill-transparent scale-100 hover:scale-110"}
+                                        `}
+                                    />
+                                    <p>{likes}</p>
                                 </Button>
 
                                 <Button className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">
