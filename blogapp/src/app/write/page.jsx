@@ -96,6 +96,7 @@ export default function writePage() {
         e.preventDefault();
         const formData = new FormData();
         formData.append('title', title);
+        formData.append('category', category);
         formData.append('content', content);
         if (featuredImage) {
             formData.append('featured_image', featuredImage);

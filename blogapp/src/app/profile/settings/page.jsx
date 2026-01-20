@@ -13,8 +13,8 @@ export default function profileSettingPage() {
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [initialLoading, setInitialLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true)
 
   const supabase = createSupabaseBrowserClient();
 
@@ -150,7 +150,7 @@ export default function profileSettingPage() {
 
             {/* Buttons */}
             <div className="flex gap-4 pt-4">
-              <Button type="submit" disabled={loading} className="flex-1">
+              <Button type="submit" className="flex-1">
                 {loading ? 'Saving...' : 'Save Changes'}
               </Button>
               <Button

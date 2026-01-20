@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const supabase = createSupabaseBrowserClient();
 
   // handle authentication 
@@ -76,7 +76,7 @@ export default function LoginPage() {
             }
           }
 
-          alert('Signup successful! Please check your email to verify your account.');
+          alert('Signup successful! Please check your email to verify your account and login to your account.');
         }
       } else {
         // Log in
@@ -94,10 +94,11 @@ export default function LoginPage() {
           alert('Login failed. Please try again.');
           return;
         }
+        setLoading(false)
       }
 
       // Success — redirect
-      window.location.href = '/blog';
+      window.location.href = '/profile';
 
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -105,13 +106,14 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+
   };
 
 
   if (loading) {
     return (
-      <div className="min-h-screen w-auto flex flex-col items-center justify-center">        
-          <Skeleton className="h-[250px] w-[250px] rounded-xl" />
+      <div className="min-h-screen w-auto flex flex-col items-center justify-center">
+        <Skeleton className="h-[250px] w-[250px] rounded-xl" />
       </div>
     );
   }
@@ -133,7 +135,7 @@ export default function LoginPage() {
       <form onSubmit={handleAuth}>
         <div className='flex flex-col gap-6 px-6'>
 
-            {/* Full Name field - only show during signup */}
+          {/* Full Name field - only show during signup */}
           {isSignUp && (
             <div className='grid gap-2'>
               <Label htmlFor="fullName">Full Name</Label>
@@ -183,6 +185,7 @@ export default function LoginPage() {
             className="w-full"
           >
             {loading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Log In')}
+            {/* {isSignUp ? 'Sign Up' : 'Log In'} */}
           </Button>
 
           <div className="text-center text-sm">

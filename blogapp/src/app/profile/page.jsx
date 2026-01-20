@@ -220,10 +220,19 @@ export default function profilePage() {
         <div className="mx-4 sm:mx-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">My Posts</h2>
-            <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-              <Plus className="w-5 h-5" />
-              New Post
-            </button>
+            <Link href="/blog">
+              <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                {/* <Plus className="w-5 h-5" /> */}
+                Explore Blogs
+              </button>
+            </Link>
+            <Link href="/write">
+              <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                New Post
+              </button>
+            </Link>
+
           </div>
 
           {userPosts.length === 0 ? (
@@ -235,9 +244,11 @@ export default function profilePage() {
               <p className="mb-8 max-w-md mx-auto">
                 Start sharing your thoughts with the world. Create your first blog post today!
               </p>
-              <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all">
-                Create Your First Post
-              </button>
+              <Link href="/write">
+                <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all">
+                  Create Your First Post
+                </button>
+              </Link>
             </Card>
           ) : (
             <>

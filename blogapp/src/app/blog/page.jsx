@@ -13,7 +13,7 @@ export default async function BlogPage() {
     const supabase = await createSupabaseServerClient();
 
 
-    const { data: { user } } = await supabase.auth.getUser();
+    // const { data: { user } } = await supabase.auth.getUser();
 
 
 

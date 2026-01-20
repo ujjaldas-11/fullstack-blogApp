@@ -292,8 +292,8 @@ export default function PostPage({ params }) {
                 {/* Action Buttons */}
                 {isOwner && (
                     <div className="backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 mb-16 sm:mb-20 shadow-2xl">
-                        <div className="flex flex-col justify-center sm:flex-row gap-3 sm:gap-4">
-                            <Button>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                            <Button className='cursor-pointer'>
 
                                 <a
                                     href={`/write/${post.id}`}
@@ -306,7 +306,7 @@ export default function PostPage({ params }) {
                         </div>
                     </div>
                 )}
-                <Link href="/blog" className="text-center"> <Button className="w-full">Back to Blog page </Button></Link>
+                <Link href="/blog" className="text-center"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
             </div>
 
 
