@@ -5,7 +5,7 @@ import DeletePostButtno from "@/components/DeletePostButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -26,6 +26,8 @@ export default function PostPage({ params }) {
     const [loading, setLoading] = useState(true);
     const [likes, setLikes] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
 
 
     useEffect(() => {
@@ -81,6 +83,17 @@ export default function PostPage({ params }) {
                     setIsLiked(!!likeData);
                 }
 
+
+                // fetch comments
+                // const { data } = await supabase
+                //     .from('comments')
+                //     .select('*')
+                //     .eq('post_id', post.id)
+                //     .order('created_at', { ascending: false });
+
+                // setComments(data || []);
+
+
                 // Fetch username
                 if (post.author_id) {
                     const { data: profile } = await supabase
@@ -94,6 +107,8 @@ export default function PostPage({ params }) {
                     }
                 }
 
+
+
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching post:', error);
@@ -101,7 +116,35 @@ export default function PostPage({ params }) {
             }
         }
 
+        // fetch comments
+
+        const fetchComments = async () => {
+            if(!post.id) return;
+
+            const { data: commentsData } = await supabase
+                .from('comments')
+                .select('*')
+                .eq('post_id', post.id)
+                .order('created_at', { ascending: false });
+
+            setComments(commentsData || []);
+
+        }
+
         fetchPostUser();
+
+
+
+        const subscription = supabase
+            .channel('comments')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'comments', filter: `post_id=eq.${post.id}` }, (payload) => {
+                fetchComments();
+            })
+            .subscribe();
+
+        return () =>  {
+            supabase.removeChannel(subscription);
+        }
     }, [slug, supabase]);
 
 
@@ -153,7 +196,26 @@ export default function PostPage({ params }) {
         }
     };
 
+    // handle comments
 
+    const handleComments = async () => {
+        if (!newComment.trim()) return;
+
+        const { error } = await supabase
+            .from('comments')
+            .insert({ 'post_id': post.id, content: newComment })
+
+        if (error) {
+            alert('comment failed: ' + error.message);
+            return;
+        } else {
+            setNewComment('');
+        };
+
+
+
+
+    }
 
     if (loading) {
         return (
@@ -305,13 +367,53 @@ export default function PostPage({ params }) {
                             <DeletePostButtno slug={post.slug} />
                         </div>
                     </div>
+                )};
+
+                {user ? (
+                    <>
+                        < div className="mb-4">
+                            <textarea
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Add a comment..."
+                                className="w-full p-4 border rounded-lg"
+                            />
+
+                            <Button
+                                onClick={handleComments}
+                                className="mt-4"
+                            >Submit</Button>
+                        </div>
+                    </>
+                ) : (
+                    <p>login to comment</p>
                 )}
+
+
+
+
+
+                {/* comments display */}
+
+                {comments.map((comment) => (
+                    <Card>
+                        <CardContent>
+                            <p className="mb-2">{comment.content}</p>
+                            <p className="text-sm text-gray-500">
+                                By Anonymous • {new Date(comment.created_at).toLocaleDateString()}
+                            </p>
+                        </CardContent>
+                    </Card>
+                ))}
+
                 <Link href="/blog" className="text-center"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
             </div>
 
 
+
+
             {/* Bottom Spacing */}
             <div className="h-12 sm:h-20"></div>
-        </div>
+        </div >
     );
 }
