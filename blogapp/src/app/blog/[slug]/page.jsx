@@ -30,26 +30,20 @@ export default function PostPage({ params }) {
     const [newComment, setNewComment] = useState('');
 
 
+    // --- EFFECT 1: Fetch Post Data ---
     useEffect(() => {
         const fetchPostUser = async () => {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 setUser(user);
 
-                console.log('Fetching post with slug:', slug);
-
-                // Fetch the post
                 const { data: post, error } = await supabase
                     .from('posts')
                     .select('id, title, content, slug, created_at, author_id, featured_image, views')
                     .eq('slug', slug)
                     .single();
 
-                console.log('Post data:', post);
-                console.log('Post error:', error);
-
                 if (error || !post) {
-                    console.error('Supabase error:', error);
                     setLoading(false);
                     return;
                 }
@@ -85,16 +79,16 @@ export default function PostPage({ params }) {
 
 
                 // fetch comments
-                // const { data } = await supabase
-                //     .from('comments')
-                //     .select('*')
-                //     .eq('post_id', post.id)
-                //     .order('created_at', { ascending: false });
+                const { data } = await supabase
+                    .from('comments')
+                    .select('*')
+                    .eq('post_id', post.id)
+                    .order('created_at', { ascending: false });
 
-                // setComments(data || []);
+                setComments(data || []);
 
+                // fetch username 
 
-                // Fetch username
                 if (post.author_id) {
                     const { data: profile } = await supabase
                         .from('profiles')
@@ -107,46 +101,57 @@ export default function PostPage({ params }) {
                     }
                 }
 
-
-
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching post:', error);
+                console.error('Error:', error);
                 setLoading(false);
             }
-        }
-
-        // fetch comments
-
-        const fetchComments = async () => {
-            if(!post.id) return;
-
-            const { data: commentsData } = await supabase
-                .from('comments')
-                .select('*')
-                .eq('post_id', post.id)
-                .order('created_at', { ascending: false });
-
-            setComments(commentsData || []);
-
-        }
+        };
 
         fetchPostUser();
-
-
-
-        const subscription = supabase
-            .channel('comments')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'comments', filter: `post_id=eq.${post.id}` }, (payload) => {
-                fetchComments();
-            })
-            .subscribe();
-
-        return () =>  {
-            supabase.removeChannel(subscription);
-        }
     }, [slug, supabase]);
 
+
+
+    // --- EFFECT 2: Realtime Comments Subscription ---
+    useEffect(() => {
+        if (!post?.id) return;
+
+        const fetchComments = async () => {
+            const { data: commentsData } = await supabase
+                .from('comments')
+                .select(`*, profiles(full_name)`)
+                .eq('post_id', post.id)
+                .order('created_at', { ascending: false });
+            setComments(commentsData || []);
+        };
+
+        setLoading(false)
+
+        // Initial fetch of comments
+        fetchComments();
+
+        // Setup subscription
+        const subscription = supabase
+            .channel(`comments-${post.id}`) // Unique channel per post
+            .on('postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'comments',
+                    filter: `post_id=eq.${post.id}`
+                },
+                (payload) => {
+                    fetchComments();
+                }
+            )
+            .subscribe();
+
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, [post?.id, supabase]); // Runs only when post.id is finally set
 
 
     // handle like 
@@ -199,21 +204,19 @@ export default function PostPage({ params }) {
     // handle comments
 
     const handleComments = async () => {
-        if (!newComment.trim()) return;
+        if (!newComment.trim() || !user) return;
 
         const { error } = await supabase
             .from('comments')
-            .insert({ 'post_id': post.id, content: newComment })
+            .insert({ 'post_id': post.id, content: newComment, 'user_id': user.id })
 
         if (error) {
             alert('comment failed: ' + error.message);
             return;
         } else {
-            setNewComment('');
+            setNewComment(newComment);
         };
-
-
-
+        console.log(newComment);
 
     }
 
@@ -367,7 +370,7 @@ export default function PostPage({ params }) {
                             <DeletePostButtno slug={post.slug} />
                         </div>
                     </div>
-                )};
+                )}
 
                 {user ? (
                     <>
@@ -394,19 +397,28 @@ export default function PostPage({ params }) {
 
 
                 {/* comments display */}
+                {comments.length === 0 && loading ? (
+                    <>
+                        <Skeleton className="mt-4 h-[50px] w-[70vw]"/>
+                        <Skeleton className="mt-4 h-[50px] w-[70vw]"/>
+                        <Skeleton classname="mt-4 h-[50px] w-[70vw]"/>
+                    </>
+                ) : comments.length > 0 ? (
 
-                {comments.map((comment) => (
-                    <Card>
+                comments.map((comment, index) => (
+                    <Card key={index} className='mb-4'>
                         <CardContent>
                             <p className="mb-2">{comment.content}</p>
                             <p className="text-sm text-gray-500">
-                                By Anonymous • {new Date(comment.created_at).toLocaleDateString()}
+                                By {comment.profiles?.full_name || 'Anonymous'} • {new Date(comment.created_at).toLocaleDateString()}
                             </p>
                         </CardContent>
                     </Card>
-                ))}
+                ))) : (
+                    <p>No comments yet. Be the first!</p>
+                )}
 
-                <Link href="/blog" className="text-center"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
+                <Link href="/blog" className="text-center mt-4"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
             </div>
 
 
