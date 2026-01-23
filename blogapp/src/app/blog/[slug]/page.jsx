@@ -1,5 +1,5 @@
 'use client'
-import { use } from "react";
+import { use, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import DeletePostButtno from "@/components/DeletePostButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,6 +28,7 @@ export default function PostPage({ params }) {
     const [isLiked, setIsLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const commentSectionRef = useRef(null);
 
 
     // --- EFFECT 1: Fetch Post Data ---
@@ -113,7 +114,7 @@ export default function PostPage({ params }) {
 
 
 
-    // --- EFFECT 2: Realtime Comments Subscription ---
+    //  EFFECT 2: Realtime Comments Subscription 
     useEffect(() => {
         if (!post?.id) return;
 
@@ -123,10 +124,11 @@ export default function PostPage({ params }) {
                 .select(`*, profiles(full_name)`)
                 .eq('post_id', post.id)
                 .order('created_at', { ascending: false });
+
+            setLoading(false)
             setComments(commentsData || []);
         };
 
-        setLoading(false)
 
         // Initial fetch of comments
         fetchComments();
@@ -151,7 +153,7 @@ export default function PostPage({ params }) {
         return () => {
             supabase.removeChannel(subscription);
         };
-    }, [post?.id, supabase]); // Runs only when post.id is finally set
+    }, [post?.id, supabase]); 
 
 
     // handle like 
@@ -214,10 +216,14 @@ export default function PostPage({ params }) {
             alert('comment failed: ' + error.message);
             return;
         } else {
-            setNewComment(newComment);
+            setNewComment('');
         };
         console.log(newComment);
 
+    }
+
+    const scrollCommentSection = ()=> {
+        commentSectionRef.current?.scrollIntoView({behaviour: 'smooth'})
     }
 
     if (loading) {
@@ -321,7 +327,9 @@ export default function PostPage({ params }) {
                                     <p>{likes}</p>
                                 </Button>
 
-                                <Button className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">
+                                <Button 
+                                    onClick={scrollCommentSection}
+                                    className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">
                                     <MessageCircle />
                                 </Button>
 
@@ -373,8 +381,8 @@ export default function PostPage({ params }) {
                 )}
 
                 {user ? (
-                    <>
-                        < div className="mb-4">
+                    <section ref={commentSectionRef}>
+                        <div className="mb-4">
                             <textarea
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
@@ -383,11 +391,12 @@ export default function PostPage({ params }) {
                             />
 
                             <Button
+                                type="button"
                                 onClick={handleComments}
-                                className="mt-4"
+                                className="mt-4 cursor-pointer"
                             >Submit</Button>
                         </div>
-                    </>
+                    </section>
                 ) : (
                     <p>login to comment</p>
                 )}
@@ -397,24 +406,24 @@ export default function PostPage({ params }) {
 
 
                 {/* comments display */}
-                {comments.length === 0 && loading ? (
+                {loading ? (
                     <>
-                        <Skeleton className="mt-4 h-[50px] w-[70vw]"/>
-                        <Skeleton className="mt-4 h-[50px] w-[70vw]"/>
-                        <Skeleton classname="mt-4 h-[50px] w-[70vw]"/>
+                        <Skeleton className="mt-4 h-[50px] w-[70vw]" />
+                        <Skeleton className="mt-4 h-[50px] w-[70vw]" />
+                        <Skeleton classname="mt-4 h-[50px] w-[70vw]" />
                     </>
                 ) : comments.length > 0 ? (
 
-                comments.map((comment, index) => (
-                    <Card key={index} className='mb-4'>
-                        <CardContent>
-                            <p className="mb-2">{comment.content}</p>
-                            <p className="text-sm text-gray-500">
-                                By {comment.profiles?.full_name || 'Anonymous'} • {new Date(comment.created_at).toLocaleDateString()}
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))) : (
+                    comments.map((comment, index) => (
+                        <Card key={index} className='mb-4'>
+                            <CardContent>
+                                <p className="mb-2">{comment.content}</p>
+                                <p className="text-sm text-gray-500">
+                                    By {comment.profiles?.full_name || 'Anonymous'} • {new Date(comment.created_at).toLocaleDateString()}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    ))) : (
                     <p>No comments yet. Be the first!</p>
                 )}
 
