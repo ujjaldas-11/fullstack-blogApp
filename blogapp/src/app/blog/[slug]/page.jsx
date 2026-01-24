@@ -153,7 +153,7 @@ export default function PostPage({ params }) {
         return () => {
             supabase.removeChannel(subscription);
         };
-    }, [post?.id, supabase]); 
+    }, [post?.id, supabase]);
 
 
     // handle like 
@@ -218,12 +218,14 @@ export default function PostPage({ params }) {
         } else {
             setNewComment('');
         };
+
+        window.location.reload(true)
         console.log(newComment);
 
     }
 
-    const scrollCommentSection = ()=> {
-        commentSectionRef.current?.scrollIntoView({behaviour: 'smooth'})
+    const scrollCommentSection = () => {
+        commentSectionRef.current?.scrollIntoView({ behaviour: 'smooth' })
     }
 
     if (loading) {
@@ -327,7 +329,7 @@ export default function PostPage({ params }) {
                                     <p>{likes}</p>
                                 </Button>
 
-                                <Button 
+                                <Button
                                     onClick={scrollCommentSection}
                                     className="flex gap-2 bg-transparent text-gray-600 border hover:bg-gray-200 cursor-pointer">
                                     <MessageCircle />
@@ -424,7 +426,9 @@ export default function PostPage({ params }) {
                             </CardContent>
                         </Card>
                     ))) : (
-                    <p>No comments yet. Be the first!</p>
+                    <Card className="mb-4 ">
+                        <CardContent className="text-center text-orange-500 font-semibold">No comments yet. Be the first!</CardContent>
+                    </Card>
                 )}
 
                 <Link href="/blog" className="text-center mt-4"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
