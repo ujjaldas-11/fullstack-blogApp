@@ -16,7 +16,7 @@ export default async function Navbar() {
     const { data: userData } = await supabase
         .from('profiles')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .single();
 
     // const handleLogout = async () => {

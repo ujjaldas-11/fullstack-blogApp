@@ -221,7 +221,6 @@ export default function PostPage({ params }) {
 
         window.location.reload(true)
         console.log(newComment);
-
     }
 
     const scrollCommentSection = () => {

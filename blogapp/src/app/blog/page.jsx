@@ -44,12 +44,12 @@ export default async function BlogPage() {
     if (authorIds.length > 0) {
         const { data: profiles } = await supabase
             .from('profiles')
-            .select('user_id, username')
+            .select('user_id, username, full_name')
             .in('user_id', authorIds);
 
         console.log('profilesdata: ', profiles);
         if (profiles) {
-            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.username || 'Anonymous']));
+            authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.full_name || 'Anonymous']));
         }
     }
 

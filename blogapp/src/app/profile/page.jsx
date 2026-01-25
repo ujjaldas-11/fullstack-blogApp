@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useState } from "react";
 import React from 'react';
-import { Settings, LogOut, Mail, Calendar, FileText, Plus, Edit3, Trash2, ThermometerSnowflake } from 'lucide-react';
+import { Settings, LogOut, Mail, Calendar, FileText, Plus, Eye, Clock, Edit3, Trash2, ThermometerSnowflake } from 'lucide-react';
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import BlogCard from "@/components/BlogCard";
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import BlogCard from "@/components/BlogCard";
 
 export default function profilePage() {
   const [user, setUser] = useState(null);
@@ -53,12 +54,38 @@ export default function profilePage() {
         .eq('author_id', user.id)
         .order('created_at', { ascending: false });
 
-      setUserPosts(posts);
+      // fetch username with post
+      const authorIds = [...new Set(posts.map(p => p.author_id).filter(Boolean))];
+      console.log('author id: ', authorIds)
+      let authorMap = {};
+
+      if (authorIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, username, full_name')
+          .in('user_id', authorIds);
+
+        console.log('profilesdata: ', profiles);
+        if (profiles) {
+          authorMap = Object.fromEntries(profiles.map(p => [p.user_id, p.full_name || 'Anonymous']));
+        }
+      }
+
+      // Add username to each post
+      const postsWithData = posts.map(post => ({
+        ...post,
+        username: authorMap[post.author_id] || 'Anonymous',
+
+      }));
+
+      setUserPosts(postsWithData);
       setLoading(false);
     }
 
     loadUserData();
   }, [supabase]);
+
+
 
   const handleLogout = async () => {
     try {
