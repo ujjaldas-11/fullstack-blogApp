@@ -52,11 +52,7 @@ export default function BlogCategorieList({ activeCategory, setActiveCategory })
 
       <div className="relative w-full px-2 md:px-4">
 
-        {/* fade indicator for mobile scroll */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-400 to-transparent z-10 pointer-events-none md:hidden" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-gray-400 to-transparent z-10 pointer-events-none md:hidden" />
-
-        <div className="category-container flex justify-center items-center gap-2 md:gap-3 overflow-x-scroll p-4 pb-3 md:pb-4 md:jsutify-center">
+        <div className="category-container flex jsutify-center items-center gap-2 md:gap-3 overflow-x-scroll scroll-smooth p-4 pb-3 md:pb-4 ">
           {
             categories.map((category, index) => {
               const isActive = activeCategory === category.name;

@@ -248,18 +248,11 @@ export default function profilePage() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">My Posts</h2>
             <Link href="/blog">
-              <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+              <button className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
                 {/* <Plus className="w-5 h-5" /> */}
                 Explore Blogs
               </button>
             </Link>
-            <Link href="/write">
-              <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-                <Plus className="w-5 h-5" />
-                New Post
-              </button>
-            </Link>
-
           </div>
 
           {userPosts.length === 0 ? (
@@ -284,6 +277,16 @@ export default function profilePage() {
           )}
         </div>
       </div>
+          {/* write post button */}
+      <div className="fixed bottom-8 right-8">
+        <Button size="lg" className="rounded-full shadow-2xl">
+          <Link href="/write" className="flex items-center gap-2">
+            <span className="text-2xl">+</span>
+            New Post
+          </Link>
+        </Button>
+      </div>
+
     </div>
   );
 }

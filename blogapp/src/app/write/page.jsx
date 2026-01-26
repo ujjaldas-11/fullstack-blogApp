@@ -118,7 +118,7 @@ export default function writePage() {
 
             <Card className="mb-8 p-6">
                 <CardTitle className="text-xl font-semibold mb-4 block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Generate with AI</CardTitle>
-                <div className="flex gap-3">
+                <div className="flex flex-col gap-3">
                     <Input
                         type="text"
                         value={aiPrompt}
