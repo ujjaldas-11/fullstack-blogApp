@@ -13,8 +13,6 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export const dynamic = 'force-dynamic';
 
-
-
 export default function PostPage({ params }) {
     const { slug } = use(params);
 
@@ -119,14 +117,30 @@ export default function PostPage({ params }) {
         if (!post?.id) return;
 
         const fetchComments = async () => {
-            const { data: commentsData } = await supabase
+            const { data: commentsData, error } = await supabase
                 .from('comments')
-                .select(`*, profiles(full_name)`)
+                .select('*')
                 .eq('post_id', post.id)
                 .order('created_at', { ascending: false });
 
+
+            if (error) console.log('comment fetch error:', error);
+
+            if (commentsData) {
+                const userIds = commentsData.map(c => c.user_id);
+                const { data: profilesData } = await supabase
+                    .from('profiles')
+                    .select('id, full_name')
+                    .in('id', userIds);
+
+                // Merge the data
+                const commentsWithProfiles = commentsData.map(comment => ({
+                    ...comment,
+                    profiles: profilesData?.find(p => p.id === comment.user_id)
+                }));
+                setComments(commentsWithProfiles);
+            }
             setLoading(false)
-            setComments(commentsData || []);
         };
 
 
@@ -349,14 +363,14 @@ export default function PostPage({ params }) {
                 >
                     <div
                         className="prose prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl max-w-none
-              prose-headings:font-bold prose-headings:mt-10 prose-headings:mb-5 prose-headings:text-slate-100
-              prose-p:leading-relaxed prose-p:mb-6 prose-p:text-slate-300
-              prose-h2:text-2xl sm:prose-h2:text-3xl lg:prose-h2:text-4xl prose-h2:tracking-tight
-              prose-a:text-slate-400 prose-a:underline prose-a:decoration-slate-600 hover:prose-a:text-slate-300 hover:prose-a:decoration-slate-500
-              prose-strong:font-semibold prose-strong:text-slate-200
-              prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-slate-800
-              prose-code:text-slate-300 prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700"
+                        prose-headings:font-bold prose-headings:mt-10 prose-headings:mb-5 prose-headings:text-slate-100
+                        prose-p:leading-relaxed prose-p:mb-6 prose-p:text-slate-300
+                        prose-h2:text-2xl sm:prose-h2:text-3xl lg:prose-h2:text-4xl prose-h2:tracking-tight
+                        prose-a:text-slate-400 prose-a:underline prose-a:decoration-slate-600 hover:prose-a:text-slate-300 hover:prose-a:decoration-slate-500
+                        prose-strong:font-semibold prose-strong:text-slate-200
+                        prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-slate-800
+                        prose-code:text-slate-300 prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                        prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700"
                         dangerouslySetInnerHTML={{
                             __html: post.content
                         }}
@@ -403,9 +417,6 @@ export default function PostPage({ params }) {
                 )}
 
 
-
-
-
                 {/* comments display */}
                 {loading ? (
                     <>
@@ -420,7 +431,7 @@ export default function PostPage({ params }) {
                             <CardContent>
                                 <p className="mb-2">{comment.content}</p>
                                 <p className="text-sm text-gray-500">
-                                    By {comment.profiles?.full_name || 'Anonymous'} • {new Date(comment.created_at).toLocaleDateString()}
+                                    By {comment.full_name || 'Anonymous'} • {new Date(comment.created_at).toLocaleDateString()}
                                 </p>
                             </CardContent>
                         </Card>
@@ -429,8 +440,8 @@ export default function PostPage({ params }) {
                         <CardContent className="text-center text-orange-500 font-semibold">No comments yet. Be the first!</CardContent>
                     </Card>
                 )}
-
                 <Link href="/blog" className="text-center mt-4"> <Button className="w-full cursor-pointer">Back to Blog page </Button></Link>
+
             </div>
 
 

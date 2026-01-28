@@ -29,6 +29,7 @@ export default function writePage() {
     const [generating, setGenerating] = useState(false);
     const [featuredImage, setFeaturedImage] = useState('');
     const [uploading, setUploading] = useState(false);
+    const [isPublish, setIsPublish] = useState(false);
 
     const supabase = createSupabaseBrowserClient()
 
@@ -94,15 +95,26 @@ export default function writePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('category', category);
-        formData.append('content', content);
-        if (featuredImage) {
-            formData.append('featured_image', featuredImage);
+        setIsPublish(true)
+
+        try {
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('content', content);
+            if (featuredImage) {
+                formData.append('featured_image', featuredImage);
+            }
+            
+            await createPost(formData);
+        } catch (error) {
+            console.error('Publishing failed:', error);
+        } finally{
+            setIsPublish(false)
         }
 
-        await createPost(formData);
+
     }
 
     return (
@@ -222,8 +234,8 @@ export default function writePage() {
                 </div>
 
                 {/* Fixed: Button className should be a string */}
-                <Button type="submit" className="cursor-pointer">
-                    Publish Post
+                <Button type="submit" className="cursor-pointer" disabled={isPublish}>
+                    {isPublish ? "publishing..." : "publish post"}
                 </Button>
             </form>
         </div>
