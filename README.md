@@ -166,49 +166,6 @@ NODE_ENV=development
 2. Click **"Create API Key"**
 3. Copy and paste in your `.env.local`
 
-#### Database Schema (Supabase SQL)
-```sql
--- Users table (auto-created by Supabase Auth)
-
--- Profiles table
-CREATE TABLE profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  username TEXT UNIQUE,
-  bio TEXT,
-  avatar_url TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Posts table
-CREATE TABLE posts (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
-  image_url TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- Comments table
-CREATE TABLE comments (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Likes table
-CREATE TABLE likes (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  created_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE(post_id, user_id)
-);
-```
-
 ## 📖 Getting Started
 
 ### Development Server
@@ -237,7 +194,7 @@ npm run lint
 ## 💡 Usage
 
 ### Creating a Blog Post
-1. Click **"Write"** in the navbar
+1. Click **"new post"** in the right bottom of blog page 
 2. Enter your post title
 3. Use the Quill editor to write your content, or
 4. Click **"Generate with AI"** to let Gemini create content for you
@@ -264,72 +221,6 @@ npm run lint
 - Click the **theme toggle** in the header (sun/moon icon)
 - Preference is automatically saved to your browser
 
-## 📡 API Routes & Server Actions
-
-### Server Actions (src/server/actions/)
-
-#### Authentication (`auth.js`)
-```javascript
-// Sign up new user
-export async function signUp(email, password)
-
-// Log in user
-export async function logIn(email, password)
-
-// Log out user
-export async function logOut()
-
-// Get current user
-export async function getCurrentUser()
-```
-
-#### Posts (`posts.js`)
-```javascript
-// Create new post
-export async function createPost(title, content, imageUrl)
-
-// Get all posts
-export async function getAllPosts(limit, offset)
-
-// Get single post
-export async function getPostById(id)
-
-// Update post
-export async function updatePost(id, title, content, imageUrl)
-
-// Delete post
-export async function deletePost(id)
-
-// Get user's posts
-export async function getUserPosts(userId)
-```
-
-#### Comments (`comments.js`)
-```javascript
-// Add comment to post
-export async function addComment(postId, content)
-
-// Get post comments
-export async function getPostComments(postId)
-
-// Delete comment
-export async function deleteComment(commentId)
-```
-
-#### Likes (`likes.js`)
-```javascript
-// Like a post
-export async function likePost(postId)
-
-// Unlike a post
-export async function unlikePost(postId)
-
-// Check if user liked post
-export async function checkUserLike(postId)
-
-// Get post likes count
-export async function getPostLikesCount(postId)
-```
 
 #### Search (`search.js`)
 ```javascript
