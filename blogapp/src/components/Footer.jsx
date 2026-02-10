@@ -12,7 +12,7 @@ export default function Footer() {
                 <p
                 // className={darkMode ? 'text-slate-400' : 'text-slate-600'}
                 >
-                    © 2024 EasyWrite. All rights reserved.
+                    © 2026 EasyWrite. All rights reserved.
                 </p>
             </div>
         </footer>
