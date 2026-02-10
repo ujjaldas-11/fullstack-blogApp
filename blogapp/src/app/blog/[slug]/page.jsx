@@ -327,7 +327,7 @@ export default function PostPage({ params }) {
                                 </Button>
 
                                 <Button
-                                    className="flex gap-2 bg-transparent hover:bg-transparent cursor-pointer"
+                                    className="flex gap-2 bg-transparent hover:bg-transparent cursor-pointer border"
                                     onClick={handleLike}
                                 // disabled={isLiked}
                                 >
@@ -339,7 +339,7 @@ export default function PostPage({ params }) {
                                                 : "text-gray-400 fill-transparent scale-100 hover:scale-110"}
                                         `}
                                     />
-                                    <p>{likes}</p>
+                                    <p className="text-red-500">{likes}</p>
                                 </Button>
 
                                 <Button
